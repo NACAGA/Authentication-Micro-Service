@@ -15,7 +15,9 @@ class Config {
 
                 connectionString.forEach(element => {
                     const [key, value] = element.split('=');
-                    
+                    if (key && value) {
+                        
+                    }
                 });
             }
         }
