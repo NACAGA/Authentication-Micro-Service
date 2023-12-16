@@ -48,18 +48,35 @@
 					"path": [
 						"user-authentication",
 						"create-user"
-					],
-					"query": [
-						{
-							"key": "username",
-							"value": "bobby",
-							"disabled": true
-						},
-						{
-							"key": "password",
-							"value": "bob",
-							"disabled": true
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change username",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newname\": \"rapper\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user-authentication/change-username",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user-authentication",
+						"change-username"
 					]
 				}
 			},
