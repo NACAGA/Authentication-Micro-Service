@@ -60,7 +60,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"newname\": \"rapper\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+					"raw": "{\n    \"new_username\": \"rapper\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -77,6 +77,35 @@
 					"path": [
 						"user-authentication",
 						"change-username"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change password",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"new_password\": \"pp\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user-authentication/change-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user-authentication",
+						"change-password"
 					]
 				}
 			},

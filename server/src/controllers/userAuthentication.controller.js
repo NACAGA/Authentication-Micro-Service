@@ -2,6 +2,7 @@ const createUserService = require('../services/createUser.service');
 const loginUserService = require('../services/loginUser.service');
 const deleteUserService = require('../services/deleteUser.service');
 const changeUsernameService = require('../services/changeUsername.service');
+const changePasswordService = require('../services/changePassword.service');
 
 async function createUser(req, res, next) {
     try {
@@ -39,9 +40,19 @@ async function changeUsername(req, res, next) {
     }
 }
 
+async function changePassword(req, res, next) {
+    try {
+        res.json(await changePasswordService.changePassword(req.body));
+    } catch (err) {
+        console.error('Error while changing password:', err.message);
+        next(err);
+    }
+}
+
 module.exports = {
     createUser,
     deleteUser,
     loginUser,
     changeUsername,
+    changePassword,
 };
