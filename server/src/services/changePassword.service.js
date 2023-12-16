@@ -1,17 +1,26 @@
 const db = require('./db.service');
 
 async function changePassword(user) {
-    let message = 'Error changing password: ';
+    let response = {
+        code: 500,
+        message: 'Error changing password: ',
+    };
 
-    const result = await db.query(`UPDATE Users SET password = ? WHERE username = ? AND password = ?`, [user.new_password, user.username, user.password]);
+    const result = await db.query(`UPDATE Users SET password = ? WHERE username = ? AND password = ?`, [
+        user.new_password,
+        user.username,
+        user.password,
+    ]);
     console.log(result);
     if (result.affectedRows) {
-        message = 'Password successfully changed';
+        response.code = 200;
+        response.message = 'Password successfully changed';
     } else {
-        message += 'Password could not be changed';
+        response.code = 401;
+        response.message = 'Password could not be changed';
     }
 
-    return message;
+    return response;
 }
 
 module.exports = { changePassword };
