@@ -19,6 +19,8 @@ npm install
 npm start
 ```
 
+You can also run `npm run dev` to run the server in development mode. This will automatically restart the server when you make changes to the code.
+
 ## Testing
 
 I'm using postman to test. For example, to test the `POST /user-authentication/create-user` endpoint, I would send a post request to `localhost:3000/user-authentication/create-user` with the following **body**:
