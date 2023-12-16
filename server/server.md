@@ -1,0 +1,35 @@
+# server
+
+## Usage
+
+Make sure the `.env` file is in the root directory of the server and has the following contents:
+
+```bash
+DB_PASSWORD=password
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=user1
+DB_NAME=test_database
+```
+
+Then run the following commands:
+
+```bash
+npm install
+npm start
+```
+
+## Testing
+
+I'm using postman to test. For example, to test the `POST /user-authentication/create-user` endpoint, I would send a post request to `localhost:3000/user-authentication/create-user` with the following **body**:
+
+```json
+{
+    "username": "test",
+    "password": "test"
+}
+```
+
+## Endpoints
+
+fill in a table here

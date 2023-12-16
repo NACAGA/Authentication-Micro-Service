@@ -8,4 +8,7 @@ router.post('/create-user', userAuthenticationController.createUser);
 /* POST login user. */
 router.post('/login-user', userAuthenticationController.loginUser);
 
+/* DELETE delete user. */
+router.delete('/delete-user', userAuthenticationController.deleteUser);
+
 module.exports = router;
