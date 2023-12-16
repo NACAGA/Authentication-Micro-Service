@@ -2,14 +2,18 @@ const db = require('./db.service');
 
 async function loginUser(user) {
     const result = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
-    console.log(result);
 
-    let message = 'Error logging in a user';
+    let response = {
+        code: 401,
+        message: 'Error logging in a user: username or password is incorrect',
+    };
+
     if (result.length) {
-        message = 'User successfully logged in';
+        response.code = 200;
+        response.message = 'User successfully logged in';
     }
 
-    return message;
+    return response;
 }
 
 module.exports = { loginUser };
