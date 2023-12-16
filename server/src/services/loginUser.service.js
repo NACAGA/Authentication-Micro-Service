@@ -1,4 +1,5 @@
 const db = require('./db.service');
+const userSession = require('./userSession.service');
 
 async function loginUser(user) {
     const result = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
@@ -9,6 +10,7 @@ async function loginUser(user) {
     };
 
     if (result.length) {
+        userSession.createUserSession(result[0].id);
         response.code = 200;
         response.message = 'User successfully logged in';
     }
