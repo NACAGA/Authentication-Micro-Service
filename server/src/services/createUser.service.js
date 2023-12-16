@@ -1,4 +1,5 @@
 const db = require('./db.service');
+const { UsernameTakenErrror } = require('../errors');
 
 async function createUser(newUser) {
     let response = {
@@ -11,7 +12,7 @@ async function createUser(newUser) {
     if (userNameTaken.length) {
         response.code = 403;
         message += 'Username is already taken';
-        return message;
+        return new UsernameTakenErrror();
     }
 
     const result = await db.query(`INSERT INTO Users (username, password) VALUES (?, ?)`, [newUser.username, newUser.password]);

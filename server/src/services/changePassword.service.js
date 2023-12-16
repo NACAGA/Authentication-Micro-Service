@@ -1,17 +1,19 @@
 const db = require('./db.service');
 const userSession = require('./userSession.service');
+const Error = require('./domain/buisnessErrror.domain');
+const Success = require('./domain/success.domain');
+
+class PasswordChangedSuccess extends Success {
+    constructor() {
+        this.code = 200;
+        this.message = 'Password changed successfully';
+    }
+}
 
 async function changePassword(user) {
-    let response = {
-        code: 500,
-        message: 'Error changing password: ',
-    };
-
     const validUserSession = await userSession.validateUserSession(user.sessionToken);
     if (validUserSession) {
-        response.code = 401;
-        response.message += 'User is not logged in';
-        return response;
+        return new Error.UserNotLoggedIn();
     }
 
     const result = await db.query(`UPDATE Users SET password = ? WHERE username = ? AND password = ?`, [
@@ -21,14 +23,11 @@ async function changePassword(user) {
     ]);
 
     if (result.length) {
-        response.code = 200;
-        response.message = 'Password changed successfully';
         await userSession.updateUserSession(user.sessionToken);
+        return new PasswordChangedSuccess();
     } else {
-        response.message += 'Invalid username or password';
+        return new Error.InvalidUsernameOrPassowrd();
     }
-
-    return response;
 }
 
-module.exports = { changePassword };
+module.exports = { changePassword, PasswordChangedSuccess };
