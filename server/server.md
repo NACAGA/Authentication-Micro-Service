@@ -30,6 +30,8 @@ I'm using postman to test. For example, to test the `POST /user-authentication/c
 }
 ```
 
+You can load in the postman collection from the `postman` directory.
+
 ## Endpoints
 
 fill in a table here
