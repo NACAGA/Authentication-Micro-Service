@@ -1,6 +1,17 @@
 const db = require('./db.service');
 const { addHours } = require('date-fns');
 const jwt = require('jsonwebtoken');
+const Error = require('./domain/buisnessErrror.domain');
+const Success = require('./domain/success.domain');
+
+class SuccessfulUserSessionCreation extends Success {
+    constructor(sessionToken) {
+        super();
+        this.code = 200;
+        this.message = 'User session successfully created';
+        this.sessionToken = sessionToken;
+    }
+}
 
 async function createUserSession(userid) {
     const expirationDate = addHours(new Date(), 2); // 2 hours from now
@@ -11,17 +22,11 @@ async function createUserSession(userid) {
         expirationDate,
     ]);
 
-    let response = {
-        code: 401,
-        message: 'Error creating a user session',
-    };
-
     if (result.affectedRows) {
-        response.code = 200;
-        response.message = 'User session successfully created';
+        return new SuccessfulUserSessionCreation(sessionToken);
     }
 
-    return response;
+    return new Error.UserSessionCreationError();
 }
 
 async function updateUserSession(sessionToken) {
@@ -34,13 +39,14 @@ async function updateUserSession(sessionToken) {
     return false;
 }
 
-async function validateUserSession(sessionToken) {
-    const result = await db.query(`SELECT * FROM UserSessions WHERE sessiontoken = ? AND userid = ?`, [sessionToken]);
+async function validateUserSession(sessionToken, username) {
+    const userid = (await db.query(`SELECT id FROM Users WHERE username = ?`, [username]))[0].id;
+    const result = await db.query(`SELECT * FROM UserSessions WHERE sessiontoken = ? AND userid = ?`, [sessionToken, userid]);
     const currentTime = new Date();
+    const sessionExpired = currentTime > result[0].expirationDate;
 
-    if (result.length) {
-        const sessionExpired = currentTime > userSession.expirationDate;
-        return !sessionExpired;
+    if (result.length && !sessionExpired) {
+        return true;
     } else {
         return false;
     }

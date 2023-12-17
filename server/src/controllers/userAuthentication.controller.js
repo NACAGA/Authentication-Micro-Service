@@ -6,9 +6,10 @@ const changePasswordService = require('../services/changePassword.service');
 
 async function createUser(req, res, next) {
     try {
-        res.json(await createUserService.createUser(req.body));
+        const response = await createUserService.createUser(req.body);
+        res.json(response.getResponse());
     } catch (err) {
-        console.error('Error while creating a user:', err.message);
+        console.error('Error while creating a user:', err);
         next(err);
     }
 }

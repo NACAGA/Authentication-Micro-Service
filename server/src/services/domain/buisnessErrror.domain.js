@@ -1,6 +1,6 @@
-class BusinessError extends Error {
-    constructor(message) {
-        super(message);
+class BusinessError {
+    constructor() {
+        this.message = '';
         this.code = 500;
     }
 
@@ -14,22 +14,73 @@ class BusinessError extends Error {
 
 class UsernameTakenError extends BusinessError {
     constructor() {
-        super('Username is already taken');
+        super();
+        this.message = 'Username is already taken';
         this.code = 403;
     }
 }
 
 class InvalidUsernameOrPassowrd extends BusinessError {
     constructor() {
-        super('Invalid username or password');
+        super();
+        this.message = 'Invalid username or password';
         this.code = 401;
     }
 }
 
 class UserNotLoggedIn extends BusinessError {
     constructor() {
-        super('User is not logged in');
+        super();
+        this.message = 'User is not logged in';
         this.code = 401;
+    }
+}
+
+class UserSessionCreationError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error creating user session';
+        this.code = 500;
+    }
+}
+
+class ChangeUsernameError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error changing username';
+        this.code = 500;
+    }
+}
+
+class ChangePasswordError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error changing password';
+        this.code = 500;
+    }
+}
+
+class CreateUserError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error creating user';
+        this.code = 500;
+    }
+}
+
+class DeleteUserError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error deleting user';
+        this.code = 500;
+    }
+}
+
+class UserDoesNotExist extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'User does not exist';
+        this.code = 403;
     }
 }
 
@@ -38,4 +89,9 @@ module.exports = {
     UsernameTakenError,
     InvalidUsernameOrPassowrd,
     UserNotLoggedIn,
+    UserSessionCreationError,
+    ChangeUsernameError,
+    ChangePasswordError,
+    CreateUserError,
+    DeleteUserError,
 };

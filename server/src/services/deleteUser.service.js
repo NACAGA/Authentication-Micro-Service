@@ -1,21 +1,27 @@
 const db = require('./db.service');
+const Error = require('./domain/buisnessErrror.domain');
+const Success = require('./domain/success.domain');
 
-async function deleteUser(newUser) {
-    let response = {
-        code: 500,
-        message: 'Error deleting a user: ',
-    };
+class UserDeletedSuccess extends Success {
+    constructor() {
+        super();
+        this.code = 200;
+        this.message = 'User successfully deleted';
+    }
+}
 
-    const result = await db.query(`DELETE FROM Users WHERE username = ? AND password = ?`, [newUser.username, newUser.password]);
-    if (result.affectedRows) {
-        response.code = 200;
-        response.message = 'User successfully deleted';
-    } else {
-        response.code = 401;
-        response.message += 'User could not be deleted';
+async function deleteUser(user) {
+    const userExists = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
+    if (!userExists.length) {
+        return new Error.UserDoesNotExist();
     }
 
-    return response;
+    const result = await db.query(`DELETE FROM Users WHERE username = ?`, [user.username]);
+    if (result.affectedRows) {
+        return new UserDeletedSuccess();
+    }
+
+    return new Error.DeleteUserError();
 }
 
 module.exports = {

@@ -5,9 +5,14 @@ class Success {
     }
 
     getResponse() {
-        return {
-            code: this.code,
-            message: this.message,
-        };
+        const properties = {};
+        for (let key in this) {
+            if (this.hasOwnProperty(key) && typeof this[key] !== 'function') {
+                properties[key] = this[key];
+            }
+        }
+        return properties;
     }
 }
+
+module.exports = Success;
