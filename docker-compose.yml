@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  database:
+    build:
+      context: database
+      dockerfile: Dockerfile
+    container_name: ams-database
+    ports:
+      - 3306:3306
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=none
+    networks:
+      obscenity:
+        ipv4_address: 172.20.0.2
+  server:
+    depends_on:
+        - database
+    build:
+        context: server
+        dockerfile: Dockerfile
+    container_name: ams-server
+    ports:
+        - 3000:3000
+    env_file:
+        - .env
+    tty: true
+    stdin_open: true
+    volumes:
+        - .:/workspace
+    networks:
+      obscenity:
+        ipv4_address: 172.20.0.3
+networks:
+  obscenity:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
