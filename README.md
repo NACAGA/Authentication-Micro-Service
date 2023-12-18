@@ -6,10 +6,10 @@ A simple user authentication micro service
 Make sure the `.env` file is in the root directory of the server and has the following contents:
 
 ```bash
-DB_PASSWORD=password # change this if you want to use a different password
+MYSQL_PASSWORD=password # change this if you want to use a different password
 DB_PORT=3306 # change this if you want to run the database on a different port
-DB_USER=user1 # change this if you want to use a different user
-DB_NAME=test_database # change this if you want to use a different database name
+MYSQL_USER=user1 # change this if you want to use a different user
+MYSQL_DATABASE=test_database # change this if you want to use a different database name
 PORT=3000 # change this if you want to run the server on a different port
 JWT_SECRET= # add your key here
 DB_HOST=database # DON'T CHANGE THIS

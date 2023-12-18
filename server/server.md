@@ -5,11 +5,11 @@
 Make sure the `.env` file is in the root directory of the server and has the following contents:
 
 ```bash
-DB_PASSWORD=password
+MYSQL_PASSWORD=password
 DB_HOST=localhost
 DB_PORT=3306
-DB_USER=user1
-DB_NAME=test_database
+MYSQL_USER=user1
+MYSQL_DATABASE=test_database
 ```
 
 Then run the following commands:
