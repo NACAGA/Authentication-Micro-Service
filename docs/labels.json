@@ -1,0 +1,54 @@
+[
+    {
+        "color": "e11d21",
+        "name": "Priority: Critical"
+    },
+    {
+        "color": "eb6420",
+        "name": "Priority: High"
+    },
+    {
+        "color": "009800",
+        "name": "Priority: Low"
+    },
+    {
+        "color": "fbca04",
+        "name": "Priority: Medium"
+    },
+    {
+        "color": "207de5",
+        "name": "Status: Backlog"
+    },
+    {
+        "color": "009800",
+        "name": "Status: Done"
+    },
+    {
+        "color": "3d7199",
+        "name": "Status: In Progress"
+    },
+    {
+        "color": "fef2c0",
+        "name": "Status: Needs Review"
+    },
+    {
+        "color": "5319e7",
+        "name": "Status: Reviewed"
+    },
+    {
+        "color": "e11d21",
+        "name": "Type: Bug"
+    },
+    {
+        "color": "d4c5f9",
+        "name": "Type: Question"
+    },
+    {
+        "color": "bfdadc",
+        "name": "Type: Reference"
+    },
+    {
+        "color": "207de5",
+        "name": "Type: Suggestion"
+    }
+]
