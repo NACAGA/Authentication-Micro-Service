@@ -3,5 +3,5 @@ CREATE TABLE UserSessions (
     userid INT NOT NULL,
     sessiontoken VARCHAR(255) NOT NULL,
     expiration DATETIME NOT NULL,
-    FOREIGN KEY (id) REFERENCES Users(id)
+    FOREIGN KEY (userid) REFERENCES Users(id)
 );

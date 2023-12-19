@@ -2,6 +2,7 @@ const db = require('./db.service');
 const userSession = require('./userSession.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
+const { tr } = require('date-fns/locale');
 
 class PasswordChangedSuccess extends Success {
     constructor() {
@@ -12,24 +13,30 @@ class PasswordChangedSuccess extends Success {
 }
 
 async function changePassword(user) {
-    const userExists = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
-    if (!userExists.length) {
-        return new Error.UserDoesNotExist();
+    const validUserSessionResult = await userSession.validateUserSession(user.sessionToken, user.username);
+    switch (true) {
+        case validUserSessionResult instanceof Error.BusinessError:
+            return validUserSessionResult;
+        default:
+            const changePasswordResult = await db.query(`UPDATE Users SET password = ? WHERE username = ?`, [
+                user.new_password,
+                user.username,
+            ]);
+            switch (true) {
+                case changePasswordResult instanceof Error.BusinessError:
+                    return changePasswordResult;
+                case changePasswordResult.result.affectedRows > 0:
+                    const updateSessionResult = await userSession.updateUserSession(user.sessionToken);
+                    switch (true) {
+                        case updateSessionResult instanceof Error.BusinessError:
+                            return updateSessionResult;
+                        default:
+                            return new PasswordChangedSuccess();
+                    }
+                default:
+                    return new Error.ChangePasswordError();
+            }
     }
-
-    const validUserSession = await userSession.validateUserSession(user.sessionToken, user.username);
-    if (!validUserSession) {
-        return new Error.UserNotLoggedIn();
-    }
-
-    const result = await db.query(`UPDATE Users SET password = ? WHERE username = ?`, [user.new_password, user.username]);
-
-    if (result.affectedRows) {
-        await userSession.updateUserSession(user.sessionToken);
-        return new PasswordChangedSuccess();
-    }
-
-    return new Error.ChangePasswordError();
 }
 
 module.exports = { changePassword, PasswordChangedSuccess };

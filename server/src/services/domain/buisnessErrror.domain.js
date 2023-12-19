@@ -84,6 +84,39 @@ class UserDoesNotExist extends BusinessError {
     }
 }
 
+class ChangeUserInfoError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error changing user info';
+        this.code = 500;
+    }
+}
+
+class InvalidSqlQueryError extends BusinessError {
+    constructor(queryValues) {
+        super();
+        this.message = 'Invalid SQL query';
+        this.code = 500;
+        this.queryValues = queryValues;
+    }
+}
+
+class SessionUpdateError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error updating user session';
+        this.code = 500;
+    }
+}
+
+class InvalidSessionTokenError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Invalid session token';
+        this.code = 403;
+    }
+}
+
 module.exports = {
     BusinessError,
     UsernameTakenError,
@@ -94,4 +127,9 @@ module.exports = {
     ChangePasswordError,
     CreateUserError,
     DeleteUserError,
+    UserDoesNotExist,
+    ChangeUserInfoError,
+    InvalidSqlQueryError,
+    SessionUpdateError,
+    InvalidSessionTokenError,
 };

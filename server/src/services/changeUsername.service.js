@@ -12,31 +12,38 @@ class UsernameChangedSuccess extends Success {
 }
 
 async function changeUsername(user) {
-    const userExists = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
-    if (!userExists.length) {
-        return new Error.UserDoesNotExist();
+    const validUserSessionResult = await userSession.validateUserSession(user.sessionToken, user.username);
+    switch (true) {
+        case validUserSessionResult instanceof Error.BusinessError:
+            return validUserSessionResult;
+        default:
+            // Check if username is already taken
+            const existingUsernameResult = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.new_username]);
+            switch (true) {
+                case existingUsernameResult instanceof Error.BusinessError:
+                    return existingUsernameResult;
+                case existingUsernameResult.result.length > 0:
+                    return new Error.UsernameTakenError();
+                default:
+                    break;
+            }
     }
 
-    // Validate user session
-    const validUserSession = await userSession.validateUserSession(user.sessionToken, user.username);
-    if (!validUserSession) {
-        return new Error.UserNotLoggedIn();
+    const changeUsernameResult = await db.query(`UPDATE Users SET username = ? WHERE username = ?`, [user.new_username, user.username]);
+    switch (true) {
+        case changeUsernameResult instanceof Error.BusinessError:
+            return changeUsernameResult;
+        case changeUsernameResult.result.affectedRows > 0:
+            const updateSessionResult = await userSession.updateUserSession(user.sessionToken);
+            switch (true) {
+                case updateSessionResult instanceof Error.BusinessError:
+                    return updateSessionResult;
+                default:
+                    return new UsernameChangedSuccess();
+            }
+        default:
+            return new Error.ChangeUsernameError();
     }
-
-    // Check if username is already taken
-    const userNameTaken = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.new_username]);
-    if (userNameTaken.length) {
-        return new Error.UsernameTakenError();
-    }
-
-    const result = await db.query(`UPDATE Users SET username = ? WHERE username = ?`, [user.new_username, user.username]);
-
-    if (result.affectedRows) {
-        await userSession.updateUserSession(user.sessionToken);
-        return new UsernameChangedSuccess();
-    }
-
-    return new Error.ChangeUsernameError();
 }
 
 module.exports = { changeUsername, UsernameChangedSuccess };
