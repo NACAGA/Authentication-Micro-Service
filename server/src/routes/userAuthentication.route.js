@@ -17,4 +17,6 @@ router.put('/change-username', userAuthenticationController.changeUsername);
 /* PUT change password. */
 router.put('/change-password', userAuthenticationController.changePassword);
 
+router.put('/change-user-info', userAuthenticationController.changeUserInfo);
+
 module.exports = router;

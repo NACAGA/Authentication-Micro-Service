@@ -13,21 +13,32 @@ class UserLoginSuccess extends Success {
 
 async function loginUser(user) {
     const userExists = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
-    if (!userExists.length) {
-        return new Error.UserDoesNotExist();
+    switch (true) {
+        case userExists instanceof Error.BusinessError:
+            return userExists; // Error occured while querying the database
+        case userExists.result.length > 0:
+            const loginUserResult = await db.query(`SELECT * FROM Users WHERE username = ? AND password = ?`, [
+                user.username,
+                user.password,
+            ]);
+            switch (true) {
+                case loginUserResult instanceof Error.BusinessError:
+                    return loginUserResult; // Error occured while querying the database
+                case loginUserResult.result.length > 0:
+                    // User exists and password is correct
+                    const sessionCreationResult = await userSession.createUserSession(loginUserResult.result[0].id);
+                    switch (true) {
+                        case sessionCreationResult instanceof Error.BusinessError:
+                            return sessionCreationResult; // Error occured while creating user session
+                        default: // User session created successfully
+                            return new UserLoginSuccess(sessionCreationResult.sessionToken);
+                    }
+                default:
+                    return new Error.InvalidUsernameOrPassowrd(); // Password is incorrect
+            }
+        default:
+            return new Error.UserDoesNotExist();
     }
-
-    const result = await db.query(`SELECT * FROM Users WHERE username = ? AND password = ?`, [user.username, user.password]);
-
-    if (result.length) {
-        const sessionCreationResult = await userSession.createUserSession(result[0].id);
-        if (sessionCreationResult instanceof Success) {
-            return new UserLoginSuccess(sessionCreationResult.sessionToken);
-        }
-        return sessionCreationResult;
-    }
-
-    return new Error.InvalidUsernameOrPassowrd();
 }
 
 module.exports = { loginUser };
