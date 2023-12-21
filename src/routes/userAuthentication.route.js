@@ -11,12 +11,13 @@ router.post('/login-user', userAuthenticationController.loginUser);
 /* DELETE delete user. */
 router.delete('/delete-user', userAuthenticationController.deleteUser);
 
-/* PUT change username. */
-router.put('/change-username', userAuthenticationController.changeUsername);
+/* PATCH change username. */
+router.patch('/change-username', userAuthenticationController.changeUsername);
 
-/* PUT change password. */
-router.put('/change-password', userAuthenticationController.changePassword);
+/* PATCH change password. */
+router.patch('/change-password', userAuthenticationController.changePassword);
 
-router.put('/change-user-info', userAuthenticationController.changeUserInfo);
+/* PATCH change user info. */
+router.patch('/change-user-info', userAuthenticationController.changeUserInfo);
 
 module.exports = router;

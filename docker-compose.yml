@@ -12,6 +12,7 @@ services:
       - .env
     environment:
       - NODE_ENV=none
+    restart: always
     networks:
       obscenity:
         ipv4_address: 172.20.0.2

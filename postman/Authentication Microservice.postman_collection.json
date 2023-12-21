@@ -54,13 +54,42 @@
 			"response": []
 		},
 		{
-			"name": "change username",
+			"name": "login user",
 			"request": {
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"new_username\": \"rapper\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+					"raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user-authentication/login-user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user-authentication",
+						"login-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change username",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"new_username\": \"xxs\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"sessionToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -85,11 +114,11 @@
 		{
 			"name": "change password",
 			"request": {
-				"method": "PUT",
+				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"new_password\": \"pp\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+					"raw": "{\n    \"new_password\": \"pp\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"sessionToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -118,7 +147,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+					"raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"sessionToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
