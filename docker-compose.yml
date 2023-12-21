@@ -19,7 +19,7 @@ services:
     depends_on:
         - database
     build:
-        context: server
+        context: .
         dockerfile: Dockerfile
     container_name: ams-server
     ports:
