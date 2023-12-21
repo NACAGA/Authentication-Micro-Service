@@ -18,7 +18,13 @@ DB_HOST=database # DON'T CHANGE THIS
 Then run the following commands:
 
 ```bash
-docker compose up --build --abort-on-container-exit
+docker compose up --build --force-recreate 
+```
+
+To remove all containers afterwards, run:
+
+```bash
+docker compose down
 ```
 
 The server will be running on `localhost:<PORT>`.
