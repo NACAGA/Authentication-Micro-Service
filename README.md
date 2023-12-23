@@ -3,17 +3,22 @@ A simple user authentication micro service
 
 ## Usage
 
-Make sure the `.env` file is in the root directory of the server and has the following contents:
+Make sure the `.env` file is in the root directory of the server and has the following keys:
 
 ```bash
 MYSQL_PASSWORD=password # change this if you want to use a different password
-DB_PORT=3306 # change this if you want to run the database on a different port
 MYSQL_USER=user1 # change this if you want to use a different user
 MYSQL_DATABASE=test_database # change this if you want to use a different database name
-PORT=3000 # change this if you want to run the server on a different port
-JWT_SECRET= # add your key here
-DB_HOST=database # DON'T CHANGE THIS
+
+JWT_SECRET = # add your key here
+
+# if you change these, you will also need to change the corresponding field in docker-compose.yml
+DB_HOST=database
+DB_PORT=3306
+SERVER_PORT=3000
 ```
+
+It's recommended to use a different password and user for production.
 
 Then run the following commands:
 
