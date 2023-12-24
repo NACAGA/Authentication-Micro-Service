@@ -9,13 +9,15 @@ Make sure the `.env` file is in the root directory of the server and has the fol
 MYSQL_PASSWORD=password # change this if you want to use a different password
 MYSQL_USER=user1 # change this if you want to use a different user
 MYSQL_DATABASE=test_database # change this if you want to use a different database name
+MYSQL_ROOT_PASSWORD=root_password # change this if you want to use a different root password
+
+DB_PORT=3306 # default mysql port
+SERVER_PORT=3000 # change this if you want to use a different port
 
 JWT_SECRET = # add your key here
 
-# if you change these, you will also need to change the corresponding field in docker-compose.yml
-DB_HOST=database
-DB_PORT=3306
-SERVER_PORT=3000
+# do not change this
+DB_HOST=database # database is the name of the database container
 ```
 
 It's recommended to use a different password and user for production.

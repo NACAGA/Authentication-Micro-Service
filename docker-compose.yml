@@ -2,35 +2,38 @@ version: '2'
 
 services:
   database:
+    env_file:
+      - .env
     build:
       context: database
+      args:
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       dockerfile: Dockerfile
     container_name: ams-database
     ports:
-      - 3306:3306
-    env_file:
-      - .env
-    environment:
-      - NODE_ENV=none
+      - ${DB_PORT}:${DB_PORT}
     restart: always
     networks:
       obscenity:
         ipv4_address: 172.20.0.2
   server:
     depends_on:
-        - database
+      - database
     build:
-        context: .
-        dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile
     container_name: ams-server
-    ports:
-        - 3000:3000
     env_file:
-        - .env
+      - .env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
     tty: true
     stdin_open: true
     volumes:
-        - .:/workspace
+      - .:/workspace
     networks:
       obscenity:
         ipv4_address: 172.20.0.3
