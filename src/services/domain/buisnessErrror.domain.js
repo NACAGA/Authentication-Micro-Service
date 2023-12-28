@@ -117,6 +117,22 @@ class InvalidSessionTokenError extends BusinessError {
     }
 }
 
+class LogoutUserError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error logging out the user';
+        this.code = 500;
+    }
+}
+
+class ChangeUserStatusError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error changing user status';
+        this.code = 500;
+    }
+}
+
 module.exports = {
     BusinessError,
     UsernameTakenError,
@@ -132,4 +148,6 @@ module.exports = {
     InvalidSqlQueryError,
     SessionUpdateError,
     InvalidSessionTokenError,
+    LogoutUserError,
+    ChangeUserStatusError
 };
