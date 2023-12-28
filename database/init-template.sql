@@ -5,7 +5,7 @@ CREATE TABLE Users (
 );
 
 CREATE TABLE UserSessions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     userid INT NOT NULL,
     sessiontoken VARCHAR(255) NOT NULL,
     expiration DATETIME NOT NULL,
