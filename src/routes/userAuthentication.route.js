@@ -19,4 +19,6 @@ router.patch('/change-password', userAuthenticationController.changePassword);
 
 router.patch('/change-user-info', userAuthenticationController.changeUserInfo);
 
+router.put('/change-user-status', userAuthenticationController.changeUserStatus);
+
 module.exports = router;
