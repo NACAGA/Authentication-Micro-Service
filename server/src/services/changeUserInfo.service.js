@@ -2,6 +2,7 @@ const utils = require('../utils/userAuthentication.util');
 const db = require('./db.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
+const userSession = require('./userSession.service');
 
 class ChangeUserInfoSuccess extends Success {
     constructor() {
@@ -12,26 +13,26 @@ class ChangeUserInfoSuccess extends Success {
 }
 
 async function changeUserInfo(user) {
-    const userExists = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
-    if (!userExists.length) {
-        return new Error.UserDoesNotExist();
+    const validUserSession = await userSession.validateUserSession(user.sessionToken, user.username);
+    switch (true) {
+        case validUserSession instanceof Error.BusinessError:
+            return validUserSession;
+        default:
+            const {query, values } = utils.buildEditUserInfoQuery(user.new_fields, user.username);
+            const changeUserInfoResult = await db.query(query, values);
+            switch (true) {
+                case changeUserInfoResult.result.affectedRows > 0:
+                    const updateSessionResult = await userSession.updateUserSession(user.sessionToken);
+                    switch (true) {
+                        case updateSessionResult instanceof Error.BusinessError:
+                            return updateSessionResult;
+                        default:
+                            return new ChangeUserInfoSuccess();
+                    }
+                default:
+                    return new Error.ChangeUserInfoError();
+            }
     }
-
-    // Validate user session
-    const validUserSession = await utils.validateUserSession(user.sessionToken, user.username);
-    if (!validUserSession) {
-        return new Error.UserNotLoggedIn();
-    }
-
-    const { query, values } = utils.buildEditUserInfoQuery(user.new_fields, user.username);
-    const result = await db.query(query, values);
-
-    if (result.affectedRows) {
-        await utils.updateUserSession(user.sessionToken);
-        return new ChangeUserInfoSuccess();
-    }
-
-    return new Error.ChangeUserInfoError();
 }
 
 module.exports = { changeUserInfo };

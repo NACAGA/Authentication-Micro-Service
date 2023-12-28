@@ -14,7 +14,6 @@ class QuerySuccess extends Success {
 }
 
 async function query(sql, params) {
-    if (!utils.verifySqlInput(params)) return new Error.InvalidSqlQueryError(params);
     const connection = await mysql.createConnection(dbConfig);
     const [rows] = await connection.execute(sql, params);
     return new QuerySuccess(rows);

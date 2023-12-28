@@ -17,6 +17,10 @@ router.put('/change-username', userAuthenticationController.changeUsername);
 /* PUT change password. */
 router.put('/change-password', userAuthenticationController.changePassword);
 
+/* PUT change user info. */
 router.put('/change-user-info', userAuthenticationController.changeUserInfo);
+
+/* POST logout user. */
+router.post('/logout-user', userAuthenticationController.logoutUser);
 
 module.exports = router;

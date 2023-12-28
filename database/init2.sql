@@ -1,3 +1,4 @@
+
 CREATE TABLE UserSessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     userid INT NOT NULL,
@@ -5,3 +6,4 @@ CREATE TABLE UserSessions (
     expiration DATETIME NOT NULL,
     FOREIGN KEY (userid) REFERENCES Users(id)
 );
+

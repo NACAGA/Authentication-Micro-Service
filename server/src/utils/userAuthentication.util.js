@@ -1,22 +1,10 @@
 // util file
-const regex = /^[a-zA-Z0-9\-_\.]+$/;
-
-function verifySqlInput(values) {
-    let validValues = false;
-    for (const value of values) {
-        if (regex.test(value)) {
-            // Returns true if value contains alphanumeric, underscore, period, hyphen, or period and nothing else
-            validValues = true;
-        }
-    }
-    return validValues;
-}
 
 function buildEditUserInfoQuery(fields, username) {
     const query = `Update Users SET `;
     const values = [];
     for (const field in fields) {
-        if (field === 'password' || field === 'username') continue;
+        if (field === 'password' || field === 'username' || field === 'status') continue;
         if (verifySqlInput(fields[field]) || verifySqlInput(field)) continue;
         query += `${field} = ?, `;
         values.push(fields[field]);
@@ -27,4 +15,4 @@ function buildEditUserInfoQuery(fields, username) {
     return { query, values };
 }
 
-module.exports = { buildEditUserInfoQuery, verifySqlInput };
+module.exports = { buildEditUserInfoQuery };
