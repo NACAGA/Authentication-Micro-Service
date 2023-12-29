@@ -17,7 +17,7 @@ async function logoutUser(user) {
         case validUsernameResult.result.length > 0:
             const userid = validUsernameResult.result[0].id;
             const nullDate = new Date(0);
-            const logoutUserResult = await db.query(`UPDATE Users SET expiration = ? WHERE userid = ?`, [nullDate, userid]);
+            const logoutUserResult = await db.query(`UPDATE UserSessions SET expiration = ? WHERE userid = ?`, [nullDate, userid]);
             switch (true) {
                 case logoutUserResult.result.affectedRows > 0:
                     return new UserLoggedOutSuccess();

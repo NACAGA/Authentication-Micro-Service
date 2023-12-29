@@ -15,8 +15,10 @@ async function changeUserStatus(user) {
     const validUsernameResult = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
     switch (true) {
         case validUsernameResult.result.length > 0:
-            const userid = validUsernameResult.result[0].id;
-            const changeUserStatusResult = await db.query(`UPDATE Users SET status = ? WHERE userid = ?`, [user.new_status, userid]);
+            const changeUserStatusResult = await db.query(`UPDATE Users SET status = ? WHERE username = ?`, [
+                user.new_status,
+                user.username,
+            ]);
             switch (true) {
                 case changeUserStatusResult.result.affectedRows > 0:
                     return new ChangeUserStatusSuccess();
@@ -28,4 +30,4 @@ async function changeUserStatus(user) {
     }
 }
 
-modules.exports = { changeUserStatus };
+module.exports = { changeUserStatus };

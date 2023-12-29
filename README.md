@@ -148,12 +148,17 @@ should be present:
 
 ```env
 MYSQL_PASSWORD=password # change this if you want to use a different password
-DB_PORT=3306 # change this if you want to run the database on a different port
 MYSQL_USER=user1 # change this if you want to use a different user
 MYSQL_DATABASE=test_database # change this if you want to use a different database name
-PORT=3000 # change this if you want to run the server on a different port
-JWT_SECRET= # add your key here
-DB_HOST=database # DON'T CHANGE THIS
+MYSQL_ROOT_PASSWORD=root_password # change this if you want to use a different root password
+
+DB_PORT=3306 # default mysql port
+SERVER_PORT=3000 # change this if you want to use a different port
+
+JWT_SECRET = # add your key here
+
+# do not change this
+DB_HOST=database # database is the name of the database container
 ```
 
 Adjust the values based on your specific configuration.
