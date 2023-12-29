@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
 const { status } = require('../configs/general.config');
+const { stat } = require('fs');
 
 class UserSessionCreationSuccess extends Success {
     constructor(sessionToken) {
@@ -57,7 +58,11 @@ class ValidateUserIsActiveSuccess extends Success {
 }
 
 async function validateUserExists(username) {
-    const validateUserExistsResult = await db.query(`SELECT * FROM Users WHERE username = ?`, [username]);
+    const validateUserExistsResult = await db.query(`SELECT * FROM Users WHERE username = ? AND status IN (?, ?)`, [
+        username,
+        status.active,
+        status.blocked,
+    ]); // Only validate for users with active or blocked status
     if (validateUserExistsResult instanceof Error.BusinessError) return validateUserExistsResult; // Error occurred while querying the database
     if (validateUserExistsResult.result.length > 0) {
         const userid = validateUserExistsResult.result[0].id;
@@ -68,7 +73,11 @@ async function validateUserExists(username) {
 }
 
 async function validateUsername(username) {
-    const validateUsernameResult = await db.query(`SELECT * FROM Users WHERE username = ?`, [username]);
+    const validateUsernameResult = await db.query(`SELECT * FROM Users WHERE username = ? AND status IN (?, ?)`, [
+        username,
+        status.active,
+        status.blocked,
+    ]); // Only check for existing usernames with active or blocked status
     if (validateUsernameResult instanceof Error.BusinessError) return validateUsernameResult; // Error occurred while querying the database
     if (validateUsernameResult.result.length > 0) return new Error.UsernameTakenError(); // Username is taken
     return new ValidateUsernameSuccess(); // Username is valid
@@ -133,6 +142,7 @@ async function validateUserSession(sessionToken, username) {
 
     if (validateUserSessionResult instanceof Error.BusinessError) return validateUserSessionResult; // Error occurred while querying the database
     if (validateUserSessionResult.result.length > 0) {
+        if (validateUserSessionResult.result[0].status === status.blocked) return new Error.UserIsBlockedError(); // User is blocked
         const currentTime = new Date();
         const sessionExpired = currentTime > validateUserSessionResult.result[0].expiration;
         if (sessionExpired) return new Error.UserNotLoggedIn(); // Session token is invalid

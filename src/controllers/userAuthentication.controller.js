@@ -5,8 +5,10 @@ const changeUsernameService = require('../services/changeUsername.service');
 const changePasswordService = require('../services/changePassword.service');
 const changeUserInfoService = require('../services/changeUserInfo.service');
 const logoutUserService = require('../services/logoutUser.service');
-const changeUserStatusService = require('../services/changeUserStatus.service');
 const validateUserSessionService = require('../services/validateUserSession.service');
+const activateUserService = require('../services/activateUser.service');
+const deactivateUserService = require('../services/deactivateUser.service');
+const blockUserService = require('../services/blockUser.service');
 
 async function createUser(req, res, next) {
     try {
@@ -72,6 +74,15 @@ async function logoutUser(req, res, next) {
     }
 }
 
+async function activateUser(req, res, next) {
+    try {
+        res.json(await activateUserService.activateUser(req.body));
+    } catch (err) {
+        console.error('Error while activating a user:', err.message);
+        next(err);
+    }
+}
+
 async function deactivateUser(req, res, next) {
     try {
         res.json(await deactivateUserService.deactivateUser(req.body));
@@ -81,11 +92,11 @@ async function deactivateUser(req, res, next) {
     }
 }
 
-async function changeUserStatus(req, res, next) {
+async function blockUser(req, res, next) {
     try {
-        res.json(await changeUserStatusService.changeUserStatus(req.body));
+        res.json(await blockUserService.blockUser(req.body));
     } catch (err) {
-        console.error('Error while changing user status:', err.message);
+        console.error('Error while blocking a user:', err.message);
         next(err);
     }
 }
@@ -107,7 +118,8 @@ module.exports = {
     changePassword,
     changeUserInfo,
     logoutUser,
+    activateUser,
     deactivateUser,
-    changeUserStatus,
+    blockUser,
     validateUserSession,
 };

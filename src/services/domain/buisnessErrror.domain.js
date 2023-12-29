@@ -79,7 +79,7 @@ class DeleteUserError extends BusinessError {
 class UserDoesNotExist extends BusinessError {
     constructor() {
         super();
-        this.message = 'User does not exist';
+        this.message = 'User does not exist or is Deactivated';
         this.code = 403;
     }
 }
@@ -151,6 +151,38 @@ class DatabaseError extends BusinessError {
     }
 }
 
+class ActivateUserError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error activating user';
+        this.code = 500;
+    }
+}
+
+class DeactivateUserError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error deactivating user';
+        this.code = 500;
+    }
+}
+
+class BlockUserError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error blocking user';
+        this.code = 500;
+    }
+}
+
+class UserIsBlockedError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'User is blocked';
+        this.code = 403;
+    }
+}
+
 module.exports = {
     BusinessError,
     UsernameTakenError,
@@ -170,4 +202,8 @@ module.exports = {
     ChangeUserStatusError,
     UserIsNotActiveError,
     DatabaseError,
+    ActivateUserError,
+    DeactivateUserError,
+    BlockUserError,
+    UserIsBlockedError,
 };

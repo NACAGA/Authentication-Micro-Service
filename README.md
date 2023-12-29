@@ -37,17 +37,19 @@ Provide a high-level overview of the microservice, including its purpose, key fe
 
 ### Base URL
 
-#### Endpoint 1
+**URL**: `/user-authentication`
 
--   **URL**: `/endpoint1`
--   **Method**: `GET`
--   **Description**: Description of what this endpoint does.
+#### Create User
+
+-   **URL**: `/create-user`
+-   **Method**: `POST`
+-   **Description**: Creates a user.
 -   **Query Parameters**:
 
-    | Parameter | Type   | Description           |
-    | --------- | ------ | --------------------- |
-    | `param1`  | String | Description of param1 |
-    | `param2`  | Number | Description of param2 |
+    | Parameter  | Type   | Description                                           |
+    | ---------- | ------ | ----------------------------------------------------- |
+    | `username` | String | The User's Username                                   |
+    | `password` | String | The User's Password (this should be hashed when sent) |
 
 -   **Example**:
 
@@ -57,59 +59,441 @@ Provide a high-level overview of the microservice, including its purpose, key fe
     {
         "headers": {},
         "body": {
-            "body-element-1": "element-1"
+            "username": "user1",
+            "password": "password"
         }
     }
     ```
 
+    Response
+
     ```json
     {
-        "result": {
-            "response-element-1": "example response"
+        "body": {
+            "code": 201,
+            "message": "User successfully created"
+        }
+    }
+    ```
+
+#### Login User
+
+-   **URL**: `/login-user`
+-   **Method**: `POST`
+-   **Description**: Logs in a user.
+-   **Query Parameters**:
+
+    | Parameter  | Type   | Description                                           |
+    | ---------- | ------ | ----------------------------------------------------- |
+    | `username` | String | The User's Username                                   |
+    | `password` | String | The User's Password (this should be hashed when sent) |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "username": "user1",
+            "password": "password"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "User successfully logged in",
+            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMTo0ODo1OS43NTlaIiwiaWF0IjoxNzAzODA3MzM5fQ.tVw4HvHm-xyKvNltM3XrHDYi2c7vecgLNr_UoO9Oz4o"
+        }
+    }
+    ```
+
+#### Change Username
+
+-   **URL**: `/change-username`
+-   **Method**: `PATCH`
+-   **Description**: Changes a user's username.
+-   **Query Parameters**:
+
+    | Parameter      | Type   | Description                                                                                          |
+    | -------------- | ------ | ---------------------------------------------------------------------------------------------------- |
+    | `username`     | String | The User's current Username                                                                          |
+    | `new_username` | String | The User's new Username                                                                              |
+    | `sessionToken` | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "new_username": "user1",
+            "username": "user2",
+            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "Username changed successfully"
+        }
+    }
+    ```
+
+#### Change Password
+
+-   **URL**: `/change-password`
+-   **Method**: `PATCH`
+-   **Description**: Changes a user's password.
+-   **Query Parameters**:
+
+    | Parameter      | Type   | Description                                                                                          |
+    | -------------- | ------ | ---------------------------------------------------------------------------------------------------- |
+    | `username`     | String | The User's Username                                                                                  |
+    | `new_password` | String | The User's new Password                                                                              |
+    | `sessionToken` | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "new_password": "123456",
+            "username": "user1",
+            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "Password changed successfully"
+        }
+    }
+    ```
+
+#### Change User Info
+
+-   **URL**: `/change-user-info`
+-   **Method**: `PATCH`
+-   **Description**: Changes a user's basic info.
+-   **Query Parameters**:
+
+    | Parameter      | Type   | Description                                                                                                                                                                                   |
+    | -------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `username`     | String | The User's Username                                                                                                                                                                           |
+    | `new_fields`   | Dict   | A dictionary containing key:value pairs where the key is the name of the db field and the value is the value for that field in the db **(password, username, and status are not valid keys)** |
+    | `sessionToken` | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed)                                                                                          |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "new_fields": {
+                "firstname": "John",
+                "lastname": "Smith",
+                "favoritecolor": "blue"
+            },
+            "username": "user1",
+            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "User info changed successfully"
+        }
+    }
+    ```
+
+#### Logout User
+
+-   **URL**: `/logout-user`
+-   **Method**: `POST`
+-   **Description**: Log a user out. This sets their session token to expired.
+-   **Query Parameters**:
+
+    | Parameter  | Type   | Description         |
+    | ---------- | ------ | ------------------- |
+    | `username` | String | The User's Username |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "username": "user1"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "User successfully logged out"
+        }
+    }
+    ```
+
+#### Deactivate User
+
+-   **URL**: `/deactivate-user`
+-   **Method**: `POST`
+-   **Description**: Deactivates a user. This sets their user to `INACTIVE`, pretty much deleting the user whilst keeping their info in the
+    database. Inactive users cannot be set back to Active without direct access to the database. Their user record is also not considered in
+    any username checking.
+-   **Query Parameters**:
+
+    | Parameter  | Type   | Description         |
+    | ---------- | ------ | ------------------- |
+    | `username` | String | The User's Username |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "username": "user1"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "User successfully deactivated"
+        }
+    }
+    ```
+
+    #### Activate User
+
+-   **URL**: `/activate-user`
+-   **Method**: `POST`
+-   **Description**: Activates a user. This request only works on Blocked or already Active users. If a user is Inactive they can only be
+    reactivated through direct queries to the database.
+-   **Query Parameters**:
+
+    | Parameter  | Type   | Description         |
+    | ---------- | ------ | ------------------- |
+    | `username` | String | The User's Username |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "username": "user1"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "User successfully activated"
+        }
+    }
+    ```
+
+#### Block User
+
+-   **URL**: `/block-user`
+-   **Method**: `POST`
+-   **Description**: Blocks a user. This request can only be performed on Active or already blocked users. If a user is Inactive they can
+    only be set to Blocked through direct queries to the database.
+-   **Query Parameters**:
+
+    | Parameter  | Type   | Description         |
+    | ---------- | ------ | ------------------- |
+    | `username` | String | The User's Username |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "username": "user1"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "User successfully blocked"
+        }
+    }
+    ```
+
+#### Delete User
+
+-   **URL**: `/delete-user`
+-   **Method**: `DEL`
+-   **Description**: Deletes a user. It is recommended that Deactivation of a user is used rather than deletion. Deactivation voids the
+    user's username as taken, and completly stops the user from logging in. Deleting a user will permanently delete a user's info from the
+    database, while deactivation will keep their info.
+-   **Query Parameters**:
+
+    | Parameter  | Type   | Description         |
+    | ---------- | ------ | ------------------- |
+    | `username` | String | The User's Username |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "username": "user1"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "User successfully deleted"
+        }
+    }
+    ```
+
+#### Validate User Session
+
+-   **URL**: `/validate-user-session`
+-   **Method**: `POST`
+-   **Description**: Validates a user's session. This is meant to be used as validation that a user is logged in for actions that the user
+    attempts to perform that are outside the scope of the authentication service. If a user has a valid unexpired session token, a success
+    will be returned.
+-   **Query Parameters**:
+
+    | Parameter      | Type   | Description                                                                                          |
+    | -------------- | ------ | ---------------------------------------------------------------------------------------------------- |
+    | `username`     | String | The User's Username                                                                                  |
+    | `sessionToken` | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "username": "user1",
+            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwNDoxNDozNC4zOTBaIiwiaWF0IjoxNzAzODE2MDc0fQ.UEH4UgI-kAYmdwsASZytfxoJzJYt0ESFsEVPQoa2PGo"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "User session is valid"
         }
     }
     ```
 
 ## Database
 
-### Setup
-
-Run the following commands:
-
-```bash
-docker compose up --build --force-recreate
-```
-
-To remove all containers afterwards, run:
-
-```bash
-docker compose down
-```
-
-The server will be running on localhost:<PORT>.
-
 ### Database Type
 
-The microservice uses a relational database system, specifically MySQL.
+The microservice uses a relational database system, specifically MariaDB.
 
 ### Database Schema
 
-The following tables constitute the database schema:
+The following tables constitute the database schema: ![Alt text](docs/dbschema.png)
 
 #### Users Table
 
 Stores information about users.
 
-| Column       | Type     | Description                    |
-| ------------ | -------- | ------------------------------ |
-| `id`         | INT      | Unique user identifier         |
-| `username`   | VARCHAR  | User's username                |
-| `email`      | VARCHAR  | User's email address           |
-| `created_at` | DATETIME | Date and time of user creation |
+| Column          | Type    | Description                  |
+| --------------- | ------- | ---------------------------- |
+| `id`            | INT     | Unique user identifier       |
+| `username`      | VARCHAR | User's username              |
+| `password`      | VARCHAR | User's password              |
+| `status`        | VARCHAR | BLOCKED, ACTIVE, or DEACTIVE |
+| `firstname`     | VARCHAR | User's first name            |
+| `lastname`      | VARCHAR | User's last name             |
+| `phone`         | VARCHAR | User's phone number          |
+| `favoritecolor` | VARCHAR | User's favorite color        |
+
+#### User Sessions Table
+
+Stores user sessions and jw tokens.
+
+| Column         | Type     | Description                           |
+| -------------- | -------- | ------------------------------------- |
+| `id`           | INT      | Unique session identifier             |
+| `userid`       | INT      | Foreign Key session owner's id        |
+| `sessiontoken` | VARCHAR  | jwt session token                     |
+| `expiration`   | DATETIME | Expiration date of the user's session |
 
 ### Relationships
 
--   The `Posts` table has a foreign key (`user_id`) referencing the `Users` table's `id`.
+-   The `UserSessions` table has a foreign key (`userid`) referencing the `Users` table's `id`.
 
 ## Getting Started
 
@@ -126,13 +510,13 @@ Before you begin, ensure you have the following prerequisites installed:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/NACAGA/<new-microservice>.git
+    git clone https://github.com/NACAGA/Authentication-Micro-Service.git
     ```
 
 2. Change into the project directory:
 
     ```bash
-    cd <new-microservice>
+    cd <Authentication-Micro-Service>
     ```
 
 3. Install dependencies:
@@ -150,9 +534,15 @@ should be present:
 MYSQL_PASSWORD=password # change this if you want to use a different password
 MYSQL_USER=user1 # change this if you want to use a different user
 MYSQL_DATABASE=test_database # change this if you want to use a different database name
-PORT=3000 # change this if you want to run the server on a different port
-JWT_SECRET= # add your key here
-DB_HOST=database # DON'T CHANGE THIS
+MYSQL_ROOT_PASSWORD=root_password # change this if you want to use a different root password
+
+DB_PORT=3306 # default mysql port
+SERVER_PORT=3000 # change this if you want to use a different port
+
+JWT_SECRET = # add your key here
+
+# do not change this
+DB_HOST=database # database is the name of the database container
 ```
 
 Adjust the values based on your specific configuration.
@@ -165,12 +555,17 @@ To run the service locally on your machine, run the following command inside of 
 npm start
 ```
 
-To spin up the microservice in a local docker container, follow these steps:
+To run the service in Docker containers the following command from the base directory:
 
-1. Run this command in the server directory
-    ```bash
-    docker ...
-    ```
+```bash
+docker compose up --build --force-recreate
+```
+
+To remove all containers afterwards, run:
+
+```bash
+docker compose down
+```
 
 ## Testing
 
