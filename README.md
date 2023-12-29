@@ -1,6 +1,6 @@
-# Microservice Name
+# User Authentication
 
-A brief description of what the microservice does.
+This microservice performs basic user authentication.
 
 ## Table of Contents
 
