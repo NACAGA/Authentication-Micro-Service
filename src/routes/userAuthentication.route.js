@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userAuthenticationController = require('../controllers/userAuthentication.controller');
+const { ro } = require('date-fns/locale');
 
 /* POST create user. */
 router.post('/create-user', userAuthenticationController.createUser);
@@ -34,5 +35,11 @@ router.post('/deactivate-user', userAuthenticationController.deactivateUser);
 
 /* POST block user. */
 router.post('/block-user', userAuthenticationController.blockUser);
+
+/* GET get users. */
+router.get('/get-users', userAuthenticationController.getUsers);
+
+/* GET get user info. */
+router.get('/get-user-info', userAuthenticationController.getUserInfo);
 
 module.exports = router;

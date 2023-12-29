@@ -9,6 +9,8 @@ const validateUserSessionService = require('../services/validateUserSession.serv
 const activateUserService = require('../services/activateUser.service');
 const deactivateUserService = require('../services/deactivateUser.service');
 const blockUserService = require('../services/blockUser.service');
+const getUsersService = require('../services/getUsers.service');
+const getUserInfoService = require('../services/getUserInfo.service');
 
 async function createUser(req, res, next) {
     try {
@@ -110,6 +112,24 @@ async function validateUserSession(req, res, next) {
     }
 }
 
+async function getUsers(req, res, next) {
+    try {
+        res.json(await getUsersService.getUsers(req.body));
+    } catch (err) {
+        console.error('Error while getting users:', err.message);
+        next(err);
+    }
+}
+
+async function getUserInfo(req, res, next) {
+    try {
+        res.json(await getUserInfoService.getUserInfo(req.body));
+    } catch (err) {
+        console.error('Error while getting user info:', err.message);
+        next(err);
+    }
+}
+
 module.exports = {
     createUser,
     deleteUser,
@@ -122,4 +142,6 @@ module.exports = {
     deactivateUser,
     blockUser,
     validateUserSession,
+    getUsers,
+    getUserInfo,
 };

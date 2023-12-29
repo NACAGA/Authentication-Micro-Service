@@ -455,6 +455,105 @@ Provide a high-level overview of the microservice, including its purpose, key fe
     }
     ```
 
+#### Get Users
+
+-   **URL**: `/get-users`
+-   **Method**: `GET`
+-   **Description**: Gets all of the requested fields for each Active or Blocked user in the database. Will not retrieve password.
+-   **Query Parameters**:
+
+    | Parameter | Type | Description                                                      |
+    | --------- | ---- | ---------------------------------------------------------------- |
+    | `fields`  | List | A list of the database fields you want to retrieve for each user |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "fields": ["username", "status", "firstname", "lastname"]
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "Users successfully retrieved",
+            "users": [
+                {
+                    "username": "user1",
+                    "status": "ACTIVE",
+                    "firstname": "John",
+                    "lastname": "Smith"
+                },
+                {
+                    "username": "user2",
+                    "status": "ACTIVE",
+                    "firstname": "NULL",
+                    "lastname": "NULL"
+                },
+                {
+                    "username": "user3",
+                    "status": "BLOCKED",
+                    "firstname": "Jim",
+                    "lastname": "NULL"
+                }
+            ]
+        }
+    }
+    ```
+
+#### Get User Info
+
+-   **URL**: `/get-user-info`
+-   **Method**: `GET`
+-   **Description**: Gets all of the info in the database for a specified user. Does not retrieve password.
+-   **Query Parameters**:
+
+    | Parameter  | Type   | Description         |
+    | ---------- | ------ | ------------------- |
+    | `username` | String | The User's Username |
+
+-   **Example**:
+
+    Request
+
+    ```json
+    {
+        "headers": {},
+        "body": {
+            "username": "user1"
+        }
+    }
+    ```
+
+    Response
+
+    ```json
+    {
+        "body": {
+            "code": 200,
+            "message": "Users successfully retrieved",
+            "user": {
+                "id": 1,
+                "username": "user1",
+                "status": "ACTIVE",
+                "firstname": "John",
+                "lastname": "Smith",
+                "phone": "NULL",
+                "favoritecolor": "blue"
+            }
+        }
+    }
+    ```
+
 ## Database
 
 ### Database Type
