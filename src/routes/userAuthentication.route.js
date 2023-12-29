@@ -20,13 +20,19 @@ router.patch('/change-password', userAuthenticationController.changePassword);
 /* PATCH change user info. */
 router.patch('/change-user-info', userAuthenticationController.changeUserInfo);
 
-/* PATCH change user status. */
-router.patch('/change-user-status', userAuthenticationController.changeUserStatus);
-
 /* POST logout user. */
 router.post('/logout-user', userAuthenticationController.logoutUser);
 
 /* POST validate user session. */
 router.post('/validate-user-session', userAuthenticationController.validateUserSession);
+
+/* POST activate user. */
+router.post('/activate-user', userAuthenticationController.activateUser);
+
+/* POST deactivate user. */
+router.post('/deactivate-user', userAuthenticationController.deactivateUser);
+
+/* POST block user. */
+router.post('/block-user', userAuthenticationController.blockUser);
 
 module.exports = router;
