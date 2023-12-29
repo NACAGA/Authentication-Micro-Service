@@ -6,6 +6,7 @@ const changePasswordService = require('../services/changePassword.service');
 const changeUserInfoService = require('../services/changeUserInfo.service');
 const logoutUserService = require('../services/logoutUser.service');
 const changeUserStatusService = require('../services/changeUserStatus.service');
+const validateUserSessionService = require('../services/validateUserSession.service');
 
 async function createUser(req, res, next) {
     try {
@@ -89,6 +90,15 @@ async function changeUserStatus(req, res, next) {
     }
 }
 
+async function validateUserSession(req, res, next) {
+    try {
+        res.json(await validateUserSessionService.validateUserSession(req.body));
+    } catch (err) {
+        console.error('Error while validating user session:', err.message);
+        next(err);
+    }
+}
+
 module.exports = {
     createUser,
     deleteUser,
@@ -99,4 +109,5 @@ module.exports = {
     logoutUser,
     deactivateUser,
     changeUserStatus,
+    validateUserSession,
 };

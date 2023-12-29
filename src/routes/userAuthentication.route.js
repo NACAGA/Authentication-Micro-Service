@@ -26,4 +26,7 @@ router.patch('/change-user-status', userAuthenticationController.changeUserStatu
 /* POST logout user. */
 router.post('/logout-user', userAuthenticationController.logoutUser);
 
+/* POST validate user session. */
+router.post('/validate-user-session', userAuthenticationController.validateUserSession);
+
 module.exports = router;

@@ -1,5 +1,5 @@
 const db = require('./db.service');
-const userSession = require('./userSession.service');
+const userSession = require('./authenticationManager.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
 const { status } = require('../configs/general.config');
@@ -18,19 +18,13 @@ async function loginUser(user) {
         user.password,
         status.active,
     ]);
-    switch (true) {
-        case loginUserResult.result.length > 0:
-            // User exists and password is correct
-            const sessionCreationResult = await userSession.createUserSession(loginUserResult.result[0].id);
-            switch (true) {
-                case sessionCreationResult instanceof Error.BusinessError:
-                    return sessionCreationResult; // Error occured while creating user session
-                default: // User session created successfully
-                    return new UserLoginSuccess(sessionCreationResult.sessionToken);
-            }
-        default:
-            return new Error.InvalidUsernameOrPassowrd(); // Username or Password is incorrect
+    if (loginUserResult instanceof Error.BusinessError) return loginUserResult; // Error occured while logging in user
+    if (loginUserResult.result.length > 0) {
+        const sessionCreationResult = await userSession.createUserSession(loginUserResult.result[0].id);
+        if (sessionCreationResult instanceof Error.BusinessError) return sessionCreationResult; // Error occured while creating user session
+        return new UserLoginSuccess(sessionCreationResult.sessionToken); // User session created successfully
     }
+    return new Error.InvalidUsernameOrPassowrd(); // Username or Password is incorrect
 }
 
 module.exports = { loginUser };
