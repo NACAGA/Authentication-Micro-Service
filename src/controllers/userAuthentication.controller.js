@@ -14,8 +14,9 @@ const getUserInfoService = require('../services/getUserInfo.service');
 
 async function createUser(req, res, next) {
     try {
-        const response = await createUserService.createUser(req.body);
-        res.json(response.getResponse());
+        let response = await createUserService.createUser(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while creating a user:', err);
         next(err);
@@ -24,7 +25,9 @@ async function createUser(req, res, next) {
 
 async function deleteUser(req, res, next) {
     try {
-        res.json(await deleteUserService.deleteUser(req.body));
+        let response = await deleteUserService.deleteUser(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while deleting a user:', err.message);
         next(err);
@@ -33,7 +36,9 @@ async function deleteUser(req, res, next) {
 
 async function loginUser(req, res, next) {
     try {
-        res.json(await loginUserService.loginUser(req.body));
+        let response = await loginUserService.loginUser(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while logging in a user:', err.message);
         next(err);
@@ -42,7 +47,9 @@ async function loginUser(req, res, next) {
 
 async function changeUsername(req, res, next) {
     try {
-        res.json(await changeUsernameService.changeUsername(req.body));
+        let response = await changeUsernameService.changeUsername(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while changing username:', err.message);
         next(err);
@@ -51,7 +58,9 @@ async function changeUsername(req, res, next) {
 
 async function changePassword(req, res, next) {
     try {
-        res.json(await changePasswordService.changePassword(req.body));
+        let response = await changePasswordService.changePassword(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while changing password:', err.message);
         next(err);
@@ -60,7 +69,9 @@ async function changePassword(req, res, next) {
 
 async function changeUserInfo(req, res, next) {
     try {
-        res.json(await changeUserInfoService.changeUserInfo(req.body));
+        let response = await changeUserInfoService.changeUserInfo(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while changing user info:', err.message);
         next(err);
@@ -69,7 +80,9 @@ async function changeUserInfo(req, res, next) {
 
 async function logoutUser(req, res, next) {
     try {
-        res.json(await logoutUserService.logoutUser(req.body));
+        let response = await logoutUserService.logoutUser(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while logging out a user:', err.message);
         next(err);
@@ -78,7 +91,9 @@ async function logoutUser(req, res, next) {
 
 async function activateUser(req, res, next) {
     try {
-        res.json(await activateUserService.activateUser(req.body));
+        let response = await activateUserService.activateUser(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while activating a user:', err.message);
         next(err);
@@ -87,7 +102,9 @@ async function activateUser(req, res, next) {
 
 async function deactivateUser(req, res, next) {
     try {
-        res.json(await deactivateUserService.deactivateUser(req.body));
+        let response = await deactivateUserService.deactivateUser(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while deactivating a user:', err.message);
         next(err);
@@ -96,7 +113,9 @@ async function deactivateUser(req, res, next) {
 
 async function blockUser(req, res, next) {
     try {
-        res.json(await blockUserService.blockUser(req.body));
+        let response = await blockUserService.blockUser(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while blocking a user:', err.message);
         next(err);
@@ -105,7 +124,9 @@ async function blockUser(req, res, next) {
 
 async function validateUserSession(req, res, next) {
     try {
-        res.json(await validateUserSessionService.validateUserSession(req.body));
+        let response = await validateUserSessionService.validateUserSession(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while validating user session:', err.message);
         next(err);
@@ -114,7 +135,9 @@ async function validateUserSession(req, res, next) {
 
 async function getUsers(req, res, next) {
     try {
-        res.json(await getUsersService.getUsers(req.body));
+        let response = await getUsersService.getUsers(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while getting users:', err.message);
         next(err);
@@ -123,7 +146,9 @@ async function getUsers(req, res, next) {
 
 async function getUserInfo(req, res, next) {
     try {
-        res.json(await getUserInfoService.getUserInfo(req.body));
+        let response = await getUserInfoService.getUserInfo(req.body);
+        response = response.getResponse();
+        res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while getting user info:', err.message);
         next(err);

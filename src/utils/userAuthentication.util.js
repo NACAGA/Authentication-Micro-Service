@@ -1,10 +1,11 @@
-function buildEditUserInfoQuery(fields, username) {
+function buildEditUserInfoQuery(fields, username, tableColumns) {
     let query = `Update Users SET `;
     let values = [];
+    console.log(tableColumns);
     for (const field in fields) {
-        if (field === 'password' || field === 'username' || field === 'status') continue;
-        query += `? = ?, `;
-        values.push(field, fields[field]);
+        if (!tableColumns.includes(field)) continue;
+        query += `${field} = ?, `;
+        values.push(fields[field]);
     }
     query = query.slice(0, -2);
     query += ` WHERE username = ?`;

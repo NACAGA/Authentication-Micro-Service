@@ -5,10 +5,10 @@ class Success {
     }
 
     getResponse() {
-        const properties = {};
+        const properties = { status: this.code, body: {} };
         for (let key in this) {
-            if (this.hasOwnProperty(key) && typeof this[key] !== 'function') {
-                properties[key] = this[key];
+            if (this.hasOwnProperty(key) && typeof this[key] !== 'function' && key !== 'code') {
+                properties.body[key] = this[key];
             }
         }
         return properties;

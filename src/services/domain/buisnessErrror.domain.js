@@ -5,10 +5,13 @@ class BusinessError {
     }
 
     getResponse() {
-        return {
-            code: this.code,
-            message: `Error: ${this.message}`,
-        };
+        const properties = { status: this.code, body: {} };
+        for (let key in this) {
+            if (this.hasOwnProperty(key) && typeof this[key] !== 'function' && key !== 'code') {
+                properties.body[key] = this[key];
+            }
+        }
+        return properties;
     }
 }
 
