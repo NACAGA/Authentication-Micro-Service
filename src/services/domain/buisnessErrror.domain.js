@@ -183,6 +183,22 @@ class UserIsBlockedError extends BusinessError {
     }
 }
 
+class GetUserInfoError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error getting user info';
+        this.code = 500;
+    }
+}
+
+class GetUsersError extends BusinessError {
+    constructor() {
+        super();
+        this.message = 'Error getting users';
+        this.code = 500;
+    }
+}
+
 module.exports = {
     BusinessError,
     UsernameTakenError,
@@ -206,4 +222,6 @@ module.exports = {
     DeactivateUserError,
     BlockUserError,
     UserIsBlockedError,
+    GetUserInfoError,
+    GetUsersError,
 };
