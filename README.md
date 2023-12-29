@@ -150,15 +150,9 @@ should be present:
 MYSQL_PASSWORD=password # change this if you want to use a different password
 MYSQL_USER=user1 # change this if you want to use a different user
 MYSQL_DATABASE=test_database # change this if you want to use a different database name
-MYSQL_ROOT_PASSWORD=root_password # change this if you want to use a different root password
-
-DB_PORT=3306 # default mysql port
-SERVER_PORT=3000 # change this if you want to use a different port
-
-JWT_SECRET = # add your key here
-
-# do not change this
-DB_HOST=database # database is the name of the database container
+PORT=3000 # change this if you want to run the server on a different port
+JWT_SECRET= # add your key here
+DB_HOST=database # DON'T CHANGE THIS
 ```
 
 Adjust the values based on your specific configuration.
@@ -181,3 +175,19 @@ To spin up the microservice in a local docker container, follow these steps:
 ## Testing
 
 Provide instructions on how to perform tests from the test suite here.
+
+npm start
+
+````
+
+To spin up the microservice in a local docker container, follow these steps:
+
+1. Run this command in the server directory
+    ```bash
+    docker ...
+    ```
+
+## Testing
+
+Provide instructions on how to perform tests from the test suite here.
+````
