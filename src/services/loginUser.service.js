@@ -1,5 +1,5 @@
 const db = require('./db.service');
-const userSession = require('./userManager.service');
+const userSession = require('./authenticationManager.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
 const { status } = require('../configs/general.config');

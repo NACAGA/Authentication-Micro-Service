@@ -2,7 +2,7 @@ const { status } = require('../configs/general.config');
 const db = require('./db.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
-const userManager = require('./userManager.service');
+const userManager = require('./authenticationManager.service');
 
 class UserLoggedOutSuccess extends Success {
     constructor() {
