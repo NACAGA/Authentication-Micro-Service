@@ -20,8 +20,6 @@ async function changeUsername(user) {
             // Check if username is already taken
             const existingUsernameResult = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.new_username]);
             switch (true) {
-                case existingUsernameResult instanceof Error.BusinessError:
-                    return existingUsernameResult;
                 case existingUsernameResult.result.length > 0:
                     return new Error.UsernameTakenError();
                 default:

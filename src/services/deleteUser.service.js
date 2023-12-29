@@ -1,6 +1,7 @@
 const db = require('./db.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
+const { status } = require('../configs/general.config');
 
 class UserDeletedSuccess extends Success {
     constructor() {
@@ -11,15 +12,11 @@ class UserDeletedSuccess extends Success {
 }
 
 async function deleteUser(user) {
-    const userExists = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
+    const userExists = await db.query(`SELECT * FROM Users WHERE username = ? AND status = ?`, [user.username, status.active]);
     switch (true) {
-        case userExists instanceof Error.BusinessError:
-            return userExists; // Error occured while querying the database
         case userExists.result.length > 0:
             const deleteUserResult = await db.query(`DELETE FROM Users WHERE username = ?`, [user.username]);
             switch (true) {
-                case deleteUserResult instanceof Error.BusinessError:
-                    return deleteUserResult; // Error occured while querying the database
                 case deleteUserResult.result.affectedRows > 0:
                     return new UserDeletedSuccess();
                 default:

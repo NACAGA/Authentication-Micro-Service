@@ -2,6 +2,7 @@ const { user } = require('../configs/db.config');
 const db = require('./db.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
+const { status } = require('../configs/general.config');
 class CreateUserSuccess extends Success {
     constructor() {
         super();
@@ -19,9 +20,10 @@ async function createUser(newUser) {
         case validUsernameResult.result.length > 0:
             return new Error.UsernameTakenError();
         default:
-            const createUserResult = await db.query(`INSERT INTO Users (username, password) VALUES (?, ?)`, [
+            const createUserResult = await db.query(`INSERT INTO Users (username, password, status) VALUES (?, ?, ?)`, [
                 newUser.username,
                 newUser.password,
+                status.active,
             ]);
             switch (true) {
                 case createUserResult instanceof Error.BusinessError:

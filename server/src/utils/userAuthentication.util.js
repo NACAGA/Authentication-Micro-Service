@@ -1,10 +1,11 @@
 // util file
 
 function buildEditUserInfoQuery(fields, username) {
-    let query = `Update Users SET `;
-    let values = [];
+    const query = `Update Users SET `;
+    const values = [];
     for (const field in fields) {
         if (field === 'password' || field === 'username' || field === 'status') continue;
+        if (verifySqlInput(fields[field]) || verifySqlInput(field)) continue;
         query += `${field} = ?, `;
         values.push(fields[field]);
     }

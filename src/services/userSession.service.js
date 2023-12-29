@@ -35,8 +35,6 @@ async function createUserSession(userid) {
     const sessionToken = jwt.sign({ userid, expirationDate }, process.env.JWT_SECRET);
     const existingUserSession = await db.query(`SELECT * FROM UserSessions WHERE userid = ?`, [userid]);
     switch (true) {
-        case existingUserSession instanceof Error.BusinessError:
-            return existingUserSession; // Error occured while querying the database
         case existingUserSession.result.length > 0:
             if (existingUserSession.result[0].expiration > new Date()) {
                 // User session exists and is not expired
@@ -57,8 +55,6 @@ async function createUserSession(userid) {
         expirationDate,
     ]);
     switch (true) {
-        case createSessionResult instanceof Error.BusinessError:
-            return createSessionResult; // Error occured while querying the database
         case createSessionResult.result.affectedRows > 0:
             // User session created successfully
             return new UserSessionCreationSuccess(sessionToken);
@@ -74,8 +70,6 @@ async function updateUserSession(sessionToken) {
         sessionToken,
     ]);
     switch (true) {
-        case updateSessionResult instanceof Error.BusinessError:
-            return updateSessionResult; // Error occured while querying the database
         case updateSessionResult.result.affectedRows > 0:
             return new UserSessionUpdateSuccess(sessionToken); // User session updated successfully
         default:
@@ -95,8 +89,6 @@ async function validateUserSession(sessionToken, username) {
                 userid,
             ]);
             switch (true) {
-                case validateUserSessionResult instanceof Error.BusinessError:
-                    return validateUserSessionResult; // Error occured while querying the database
                 case validateUserSessionResult.result.length > 0:
                     const currentTime = new Date();
                     const sessionExpired = currentTime > validateUserSessionResult.result[0].expiration;
