@@ -2,7 +2,7 @@ const utils = require('../utils/userAuthentication.util');
 const db = require('./db.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
-const userSession = require('./userSession.service');
+const userManager = require('./userManager.service');
 
 class ChangeUserInfoSuccess extends Success {
     constructor() {
@@ -13,26 +13,20 @@ class ChangeUserInfoSuccess extends Success {
 }
 
 async function changeUserInfo(user) {
-    const validUserSession = await userSession.validateUserSession(user.sessionToken, user.username);
-    switch (true) {
-        case validUserSession instanceof Error.BusinessError:
-            return validUserSession;
-        default:
-            const {query, values } = utils.buildEditUserInfoQuery(user.new_fields, user.username);
-            const changeUserInfoResult = await db.query(query, values);
-            switch (true) {
-                case changeUserInfoResult.result.affectedRows > 0:
-                    const updateSessionResult = await userSession.updateUserSession(user.sessionToken);
-                    switch (true) {
-                        case updateSessionResult instanceof Error.BusinessError:
-                            return updateSessionResult;
-                        default:
-                            return new ChangeUserInfoSuccess();
-                    }
-                default:
-                    return new Error.ChangeUserInfoError();
-            }
+    const validateUserSessionResult = await userManager.validateUserSession(user.sessionToken, user.username);
+    if (validateUserSessionResult instanceof Error.BusinessError) return validateUserSessionResult;
+
+    const { query, values } = utils.buildEditUserInfoQuery(user.new_fields, user.username);
+    const changeUserInfoResult = await db.query(query, values);
+    if (changeUserInfoResult instanceof Error.BusinessError) return changeUserInfoResult;
+
+    if (changeUserInfoResult.result.affectedRows > 0) {
+        const updateSessionResult = await userManager.updateUserSession(user.sessionToken);
+        if (updateSessionResult instanceof Error.BusinessError) return updateSessionResult;
+        return new ChangeUserInfoSuccess(); // User info changed successfully
     }
+
+    return new Error.ChangeUserInfoError();
 }
 
 module.exports = { changeUserInfo };

@@ -133,6 +133,24 @@ class ChangeUserStatusError extends BusinessError {
     }
 }
 
+class UserIsNotActiveError extends BusinessError {
+    constructor(status) {
+        super();
+        this.message = 'User is not active';
+        this.code = 403;
+        this.status = status;
+    }
+}
+
+class DatabaseError extends BusinessError {
+    constructor(err) {
+        super();
+        this.message = 'Error querying the database';
+        this.code = 500;
+        this.error = err;
+    }
+}
+
 module.exports = {
     BusinessError,
     UsernameTakenError,
@@ -149,5 +167,7 @@ module.exports = {
     SessionUpdateError,
     InvalidSessionTokenError,
     LogoutUserError,
-    ChangeUserStatusError
+    ChangeUserStatusError,
+    UserIsNotActiveError,
+    DatabaseError,
 };

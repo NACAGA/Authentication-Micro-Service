@@ -1,7 +1,7 @@
 const db = require('./db.service');
 const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
-const { status } = require('../configs/general.config');
+const userManager = require('./userManager.service');
 
 class ChangeUserStatusSuccess extends Success {
     constructor() {
@@ -12,22 +12,14 @@ class ChangeUserStatusSuccess extends Success {
 }
 
 async function changeUserStatus(user) {
-    const validUsernameResult = await db.query(`SELECT * FROM Users WHERE username = ?`, [user.username]);
-    switch (true) {
-        case validUsernameResult.result.length > 0:
-            const changeUserStatusResult = await db.query(`UPDATE Users SET status = ? WHERE username = ?`, [
-                user.new_status,
-                user.username,
-            ]);
-            switch (true) {
-                case changeUserStatusResult.result.affectedRows > 0:
-                    return new ChangeUserStatusSuccess();
-                default:
-                    return new Error.ChangeUserStatusError(); // Error occured while deactivating user
-            }
-        default:
-            return new Error.UserDoesNotExist(); // User does not exist
-    }
+    const validateUserExistsResult = await userManager.validateUserExists(user.username);
+    if (validateUserExistsResult instanceof Error.BusinessError) return validateUserExistsResult;
+
+    const changeUserStatusResult = await db.query(`UPDATE Users SET status = ? WHERE username = ?`, [user.new_status, user.username]);
+    if (changeUserStatusResult instanceof Error.BusinessError) return changeUserStatusResult;
+    if (changeUserStatusResult.result.affectedRows > 0) return new ChangeUserStatusSuccess(); // User status changed successfully
+
+    return new Error.ChangeUserStatusError(); // Error occured while deactivating user
 }
 
 module.exports = { changeUserStatus };
