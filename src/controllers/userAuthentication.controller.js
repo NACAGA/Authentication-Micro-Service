@@ -4,7 +4,6 @@ const deleteUserService = require('../services/deleteUser.service');
 const changeUsernameService = require('../services/changeUsername.service');
 const changePasswordService = require('../services/changePassword.service');
 const changeUserInfoService = require('../services/changeUserInfo.service');
-const logoutUserService = require('../services/logoutUser.service');
 const validateUserSessionService = require('../services/validateUserSession.service');
 const activateUserService = require('../services/activateUser.service');
 const deactivateUserService = require('../services/deactivateUser.service');
@@ -74,17 +73,6 @@ async function changeUserInfo(req, res, next) {
         res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while changing user info:', err.message);
-        next(err);
-    }
-}
-
-async function logoutUser(req, res, next) {
-    try {
-        let response = await logoutUserService.logoutUser(req.body);
-        response = response.getResponse();
-        res.status(response.status).json(response.body);
-    } catch (err) {
-        console.error('Error while logging out a user:', err.message);
         next(err);
     }
 }
@@ -162,7 +150,6 @@ module.exports = {
     changeUsername,
     changePassword,
     changeUserInfo,
-    logoutUser,
     activateUser,
     deactivateUser,
     blockUser,

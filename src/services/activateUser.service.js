@@ -13,7 +13,7 @@ class ActivateUserSuccess extends Success {
 }
 
 async function activateUser(user) {
-    const validateUserExistsResult = await authManager.validateUserExists(user.username);
+    const validateUserExistsResult = await authManager.validateUserExists(user.id);
     if (validateUserExistsResult instanceof Error.BusinessError) return validateUserExistsResult;
 
     const activateUserResult = await db.query(`UPDATE Users SET status = ? WHERE id = ?`, [status.active, validateUserExistsResult.userid]); // Set the user's status to active

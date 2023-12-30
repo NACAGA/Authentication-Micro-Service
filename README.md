@@ -109,7 +109,7 @@ Provide a high-level overview of the microservice, including its purpose, key fe
         "body": {
             "code": 200,
             "message": "User successfully logged in",
-            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMTo0ODo1OS43NTlaIiwiaWF0IjoxNzAzODA3MzM5fQ.tVw4HvHm-xyKvNltM3XrHDYi2c7vecgLNr_UoO9Oz4o"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMTo0ODo1OS43NTlaIiwiaWF0IjoxNzAzODA3MzM5fQ.tVw4HvHm-xyKvNltM3XrHDYi2c7vecgLNr_UoO9Oz4o"
         }
     }
     ```
@@ -125,7 +125,7 @@ Provide a high-level overview of the microservice, including its purpose, key fe
     | -------------- | ------ | ---------------------------------------------------------------------------------------------------- |
     | `username`     | String | The User's current Username                                                                          |
     | `new_username` | String | The User's new Username                                                                              |
-    | `sessionToken` | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
+    | `token`        | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
 
 -   **Example**:
 
@@ -137,7 +137,7 @@ Provide a high-level overview of the microservice, including its purpose, key fe
         "body": {
             "new_username": "user1",
             "username": "user2",
-            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
         }
     }
     ```
@@ -164,7 +164,7 @@ Provide a high-level overview of the microservice, including its purpose, key fe
     | -------------- | ------ | ---------------------------------------------------------------------------------------------------- |
     | `username`     | String | The User's Username                                                                                  |
     | `new_password` | String | The User's new Password                                                                              |
-    | `sessionToken` | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
+    | `token`        | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
 
 -   **Example**:
 
@@ -176,7 +176,7 @@ Provide a high-level overview of the microservice, including its purpose, key fe
         "body": {
             "new_password": "123456",
             "username": "user1",
-            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
         }
     }
     ```
@@ -199,11 +199,11 @@ Provide a high-level overview of the microservice, including its purpose, key fe
 -   **Description**: Changes a user's basic info.
 -   **Query Parameters**:
 
-    | Parameter      | Type   | Description                                                                                                                                                                                   |
-    | -------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | `username`     | String | The User's Username                                                                                                                                                                           |
-    | `new_fields`   | Dict   | A dictionary containing key:value pairs where the key is the name of the db field and the value is the value for that field in the db **(password, username, and status are not valid keys)** |
-    | `sessionToken` | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed)                                                                                          |
+    | Parameter    | Type   | Description                                                                                                                                                                                   |
+    | ------------ | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `username`   | String | The User's Username                                                                                                                                                                           |
+    | `new_fields` | Dict   | A dictionary containing key:value pairs where the key is the name of the db field and the value is the value for that field in the db **(password, username, and status are not valid keys)** |
+    | `token`      | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed)                                                                                          |
 
 -   **Example**:
 
@@ -219,7 +219,7 @@ Provide a high-level overview of the microservice, including its purpose, key fe
                 "favoritecolor": "blue"
             },
             "username": "user1",
-            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwMjoyMzozMi42NDNaIiwiaWF0IjoxNzAzODA5NDEyfQ.3Wm3ivdpyWUFryDFIZhsKxpwL_VPD5hgcThHmO1iWcg"
         }
     }
     ```
@@ -425,10 +425,10 @@ Provide a high-level overview of the microservice, including its purpose, key fe
     will be returned.
 -   **Query Parameters**:
 
-    | Parameter      | Type   | Description                                                                                          |
-    | -------------- | ------ | ---------------------------------------------------------------------------------------------------- |
-    | `username`     | String | The User's Username                                                                                  |
-    | `sessionToken` | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
+    | Parameter  | Type   | Description                                                                                          |
+    | ---------- | ------ | ---------------------------------------------------------------------------------------------------- |
+    | `username` | String | The User's Username                                                                                  |
+    | `token`    | String | The User's session token (user must be ACTIVE and have a valid session token for request to succeed) |
 
 -   **Example**:
 
@@ -439,7 +439,7 @@ Provide a high-level overview of the microservice, including its purpose, key fe
         "headers": {},
         "body": {
             "username": "user1",
-            "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwNDoxNDozNC4zOTBaIiwiaWF0IjoxNzAzODE2MDc0fQ.UEH4UgI-kAYmdwsASZytfxoJzJYt0ESFsEVPQoa2PGo"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yOVQwNDoxNDozNC4zOTBaIiwiaWF0IjoxNzAzODE2MDc0fQ.UEH4UgI-kAYmdwsASZytfxoJzJYt0ESFsEVPQoa2PGo"
         }
     }
     ```
@@ -583,12 +583,12 @@ Stores information about users.
 
 Stores user sessions and jw tokens.
 
-| Column         | Type     | Description                           |
-| -------------- | -------- | ------------------------------------- |
-| `id`           | INT      | Unique session identifier             |
-| `userid`       | INT      | Foreign Key session owner's id        |
-| `sessiontoken` | VARCHAR  | jwt session token                     |
-| `expiration`   | DATETIME | Expiration date of the user's session |
+| Column       | Type     | Description                           |
+| ------------ | -------- | ------------------------------------- |
+| `id`         | INT      | Unique session identifier             |
+| `userid`     | INT      | Foreign Key session owner's id        |
+| `token`      | VARCHAR  | jwt session token                     |
+| `expiration` | DATETIME | Expiration date of the user's session |
 
 ### Relationships
 
