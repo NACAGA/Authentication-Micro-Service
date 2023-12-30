@@ -4,24 +4,25 @@ const Success = require('./domain/success.domain');
 const { status } = require('../configs/general.config');
 const userManager = require('./authenticationManager.service');
 class CreateUserSuccess extends Success {
-    constructor() {
+    constructor(username) {
         super();
         this.code = 201;
         this.message = 'User successfully created';
+        this.username = username;
     }
 }
 
-async function createUser(newUser) {
-    const validUsernameResult = await userManager.validateUsername(newUser.username);
+async function createUser(user) {
+    const validUsernameResult = await userManager.validateUsername(user.username);
     if (validUsernameResult instanceof Error.BusinessError) return validUsernameResult;
 
     const createUserResult = await db.query(`INSERT INTO Users (username, password, status) VALUES (?, ?, ?)`, [
-        newUser.username,
-        newUser.password,
+        user.username,
+        user.password,
         status.active,
     ]);
     if (createUserResult instanceof Error.DatabaseError) return createUserResult;
-    if (createUserResult.result.affectedRows > 0) return new CreateUserSuccess();
+    if (createUserResult.result.affectedRows > 0) return new CreateUserSuccess(user.username);
 
     return new Error.CreateUserError();
 }

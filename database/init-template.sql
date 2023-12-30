@@ -12,7 +12,7 @@ CREATE TABLE Users (
 CREATE TABLE UserSessions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     userid INT NOT NULL,
-    sessiontoken VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
     expiration DATETIME NOT NULL,
     FOREIGN KEY (userid) REFERENCES Users(id)
 );

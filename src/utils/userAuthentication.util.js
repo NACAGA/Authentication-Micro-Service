@@ -1,4 +1,4 @@
-function buildEditUserInfoQuery(fields, username, tableColumns) {
+function buildEditUserInfoQuery(fields, userid, tableColumns) {
     let query = `Update Users SET `;
     let values = [];
     console.log(tableColumns);
@@ -8,8 +8,8 @@ function buildEditUserInfoQuery(fields, username, tableColumns) {
         values.push(fields[field]);
     }
     query = query.slice(0, -2);
-    query += ` WHERE username = ?`;
-    values.push(username);
+    query += ` WHERE id = ?`;
+    values.push(userid);
     return { query, values };
 }
 

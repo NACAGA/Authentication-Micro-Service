@@ -13,8 +13,8 @@ class GetUserInfoSuccess extends Success {
 }
 
 async function getUserInfo(user) {
-    const getUserInfoResult = await db.query(`SELECT * FROM Users WHERE username = ? and status IN (?, ?)`, [
-        user.username,
+    const getUserInfoResult = await db.query(`SELECT * FROM Users WHERE id = ? and status IN (?, ?)`, [
+        user.id,
         status.active,
         status.blocked,
     ]);

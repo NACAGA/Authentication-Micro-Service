@@ -4,11 +4,11 @@ const Error = require('./domain/buisnessErrror.domain');
 const Success = require('./domain/success.domain');
 const { status } = require('../configs/general.config');
 class UserLoginSuccess extends Success {
-    constructor(sessionToken) {
+    constructor(token) {
         super();
         this.code = 200;
         this.message = 'User successfully logged in';
-        this.sessionToken = sessionToken;
+        this.token = token;
     }
 }
 
@@ -26,7 +26,7 @@ async function loginUser(user) {
                 case sessionCreationResult instanceof Error.BusinessError:
                     return sessionCreationResult; // Error occured while creating user session
                 default: // User session created successfully
-                    return new UserLoginSuccess(sessionCreationResult.sessionToken);
+                    return new UserLoginSuccess(sessionCreationResult.token);
             }
         default:
             return new Error.InvalidUsernameOrPassowrd(); // Username or Password is incorrect

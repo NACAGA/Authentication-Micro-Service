@@ -4,7 +4,6 @@ const deleteUserService = require('../services/deleteUser.service');
 const changeUsernameService = require('../services/changeUsername.service');
 const changePasswordService = require('../services/changePassword.service');
 const changeUserInfoService = require('../services/changeUserInfo.service');
-const logoutUserService = require('../services/logoutUser.service');
 const validateUserSessionService = require('../services/validateUserSession.service');
 const activateUserService = require('../services/activateUser.service');
 const deactivateUserService = require('../services/deactivateUser.service');
@@ -38,6 +37,7 @@ async function loginUser(req, res, next) {
     try {
         let response = await loginUserService.loginUser(req.body);
         response = response.getResponse();
+        res.setHeader('Authorization', 'Bearer ' + response.token);
         res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while logging in a user:', err.message);
@@ -47,7 +47,8 @@ async function loginUser(req, res, next) {
 
 async function changeUsername(req, res, next) {
     try {
-        let response = await changeUsernameService.changeUsername(req.body);
+        const token = req.headers.authorization.split(' ')[1];
+        let response = await changeUsernameService.changeUsername(token, req.body);
         response = response.getResponse();
         res.status(response.status).json(response.body);
     } catch (err) {
@@ -58,7 +59,8 @@ async function changeUsername(req, res, next) {
 
 async function changePassword(req, res, next) {
     try {
-        let response = await changePasswordService.changePassword(req.body);
+        const token = req.headers.authorization.split(' ')[1];
+        let response = await changePasswordService.changePassword(token, req.body);
         response = response.getResponse();
         res.status(response.status).json(response.body);
     } catch (err) {
@@ -69,22 +71,12 @@ async function changePassword(req, res, next) {
 
 async function changeUserInfo(req, res, next) {
     try {
-        let response = await changeUserInfoService.changeUserInfo(req.body);
+        const token = req.headers.authorization.split(' ')[1];
+        let response = await changeUserInfoService.changeUserInfo(token, req.body);
         response = response.getResponse();
         res.status(response.status).json(response.body);
     } catch (err) {
         console.error('Error while changing user info:', err.message);
-        next(err);
-    }
-}
-
-async function logoutUser(req, res, next) {
-    try {
-        let response = await logoutUserService.logoutUser(req.body);
-        response = response.getResponse();
-        res.status(response.status).json(response.body);
-    } catch (err) {
-        console.error('Error while logging out a user:', err.message);
         next(err);
     }
 }
@@ -124,7 +116,8 @@ async function blockUser(req, res, next) {
 
 async function validateUserSession(req, res, next) {
     try {
-        let response = await validateUserSessionService.validateUserSession(req.body);
+        const token = req.headers.authorization.split(' ')[1];
+        let response = await validateUserSessionService.validateUserSession(token);
         response = response.getResponse();
         res.status(response.status).json(response.body);
     } catch (err) {
@@ -162,7 +155,6 @@ module.exports = {
     changeUsername,
     changePassword,
     changeUserInfo,
-    logoutUser,
     activateUser,
     deactivateUser,
     blockUser,

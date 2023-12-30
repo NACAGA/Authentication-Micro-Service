@@ -1,173 +1,144 @@
 {
-	"info": {
-		"_postman_id": "819bdba4-a577-4f42-95f2-0d540bab4b20",
-		"name": "Authentication Microservice",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "well check",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "create user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user-authentication/create-user",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user-authentication",
-						"create-user"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "login user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user-authentication/login-user",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user-authentication",
-						"login-user"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "change username",
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"new_username\": \"xxs\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"sessionToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user-authentication/change-username",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user-authentication",
-						"change-username"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "change password",
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"new_password\": \"pp\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"sessionToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user-authentication/change-password",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user-authentication",
-						"change-password"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete user",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"sessionToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user-authentication/delete-user",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user-authentication",
-						"delete-user"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+    "info": {
+        "_postman_id": "819bdba4-a577-4f42-95f2-0d540bab4b20",
+        "name": "Authentication Microservice",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "well check",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:3000/",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000",
+                    "path": [""]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "create user",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:3000/user-authentication/create-user",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000",
+                    "path": ["user-authentication", "create-user"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "login user",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:3000/user-authentication/login-user",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000",
+                    "path": ["user-authentication", "login-user"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "change username",
+            "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"new_username\": \"xxs\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:3000/user-authentication/change-username",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000",
+                    "path": ["user-authentication", "change-username"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "change password",
+            "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"new_password\": \"pp\",\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:3000/user-authentication/change-password",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000",
+                    "path": ["user-authentication", "change-password"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "delete user",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"username\": \"logic\",\n    \"password\": \"bobby\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0xMi0yMVQyMToyNDowOC41MjlaIiwiaWF0IjoxNzAzMTg2NjQ4fQ.nMGPvVCQ_Z5JTvbn_SGYuId3c8v8KwTlOotLV8mzw28\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:3000/user-authentication/delete-user",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000",
+                    "path": ["user-authentication", "delete-user"]
+                }
+            },
+            "response": []
+        }
+    ]
 }

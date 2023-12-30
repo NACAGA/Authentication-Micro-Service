@@ -7,37 +7,43 @@ const { status } = require('../configs/general.config');
 const { stat } = require('fs');
 
 class UserSessionCreationSuccess extends Success {
-    constructor(sessionToken) {
+    constructor(userid, token) {
         super();
         this.code = 200;
         this.message = 'User session successfully created';
-        this.sessionToken = sessionToken;
+        this.userid = userid;
+        this.token = token;
     }
 }
 
 class UserSessionUpdateSuccess extends Success {
-    constructor(sessionToken) {
+    constructor(userid, token) {
         super();
         this.code = 200;
         this.message = 'User session successfully updated';
-        this.sessionToken = sessionToken;
+        this.userid = userid;
+        this.token = token;
     }
 }
 
 class ValidateUserSessionSuccess extends Success {
-    constructor() {
+    constructor(userid, username, token) {
         super();
         this.code = 200;
         this.message = 'User session is valid';
+        this.userid = userid;
+        this.username = username;
+        this.token = token;
     }
 }
 
 class ValidateUserExistsSuccess extends Success {
-    constructor(userid) {
+    constructor(userid, username) {
         super();
         this.code = 200;
         this.message = 'User exists';
         this.userid = userid;
+        this.username = username;
     }
 }
 
@@ -50,23 +56,21 @@ class ValidateUsernameSuccess extends Success {
 }
 
 class ValidateUserIsActiveSuccess extends Success {
-    constructor() {
+    constructor(userid, username) {
         super();
         this.code = 200;
         this.message = 'User is active';
+        this.userid = userid;
+        this.username = username;
     }
 }
 
-async function validateUserExists(username) {
-    const validateUserExistsResult = await db.query(`SELECT * FROM Users WHERE username = ? AND status IN (?, ?)`, [
-        username,
-        status.active,
-        status.blocked,
-    ]); // Only validate for users with active or blocked status
+async function validateUserExists(userid) {
+    const validateUserExistsResult = await db.query(`SELECT * FROM Users WHERE id = ?`, [userid]);
     if (validateUserExistsResult instanceof Error.BusinessError) return validateUserExistsResult; // Error occurred while querying the database
     if (validateUserExistsResult.result.length > 0) {
-        const userid = validateUserExistsResult.result[0].id;
-        return new ValidateUserExistsSuccess(userid); // User exists
+        const username = validateUserExistsResult.result[0].username;
+        return new ValidateUserExistsSuccess(userid, username); // User exists
     }
 
     return new Error.UserDoesNotExist(); // User does not exist
@@ -83,78 +87,40 @@ async function validateUsername(username) {
     return new ValidateUsernameSuccess(); // Username is valid
 }
 
-async function validateUserIsActive(username) {
-    const validateUserExistsResult = await validateUserExists(username);
+async function validateUserIsActive(userid) {
+    const validateUserExistsResult = await validateUserExists(userid);
     if (validateUserExistsResult instanceof Error.BusinessError) return validateUserExistsResult; // Error occurred while querying the database
-    const validateUserIsActiveResult = await db.query(`SELECT * FROM Users WHERE username = ? AND status = ?`, [username, status.active]);
+    const validateUserIsActiveResult = await db.query(`SELECT * FROM Users WHERE userid = ? AND status = ?`, [userid, status.active]);
     if (validateUserIsActiveResult instanceof Error.BusinessError) return validateUserIsActiveResult; // Error occurred while querying the database
     if (validateUserIsActiveResult.result.length > 0) return new ValidateUserIsActiveSuccess(); // User is active
     return new Error.UserIsNotActiveError(validateUserIsActiveResult.result[0].status); // User is not active
 }
 
 async function createUserSession(userid) {
-    const expirationDate = addHours(new Date(), 2); // 2 hours from now
-    const sessionToken = jwt.sign({ userid, expirationDate }, process.env.JWT_SECRET);
-    const existingUserSessionResult = await db.query(`SELECT * FROM UserSessions WHERE userid = ?`, [userid]);
-    if (existingUserSessionResult instanceof Error.BusinessError) return existingUserSessionResult; // Error occurred while querying the database
-
-    // If the User already has a session, update the expiration date
-    if (existingUserSessionResult.result.length > 0) {
-        const sessionUpdateResult = await updateUserSession(existingUserSessionResult.result[0].sessiontoken);
-        if (sessionUpdateResult instanceof Error.BusinessError) return sessionUpdateResult; // Error occurred while updating user session
-
-        return new UserSessionCreationSuccess(sessionUpdateResult.sessionToken);
-    }
-
-    const createSessionResult = await db.query(`INSERT INTO UserSessions (userid, sessiontoken, expiration) VALUES (?, ?, ?)`, [
-        userid,
-        sessionToken,
-        expirationDate,
-    ]);
-    if (createSessionResult instanceof Error.BusinessError) return createSessionResult; // Error occurred while querying the database
-    if (createSessionResult.result.affectedRows > 0) return new UserSessionCreationSuccess(sessionToken); // User session created successfully
-
-    return new Error.UserSessionCreationError(); // Error occured while creating user session
+    const token = jwt.sign({ id: userid }, process.env.JWT_SECRET, { expiresIn: '2h' });
+    return new UserSessionCreationSuccess(userid, token); // User session created successfully
 }
 
-async function updateUserSession(sessionToken) {
-    const expirationDate = addHours(new Date(), 2); // 2 hours from now
-    const updateSessionResult = await db.query(`UPDATE UserSessions SET expiration = ? WHERE sessiontoken = ?`, [
-        expirationDate,
-        sessionToken,
-    ]);
-    if (updateSessionResult instanceof Error.BusinessError) return updateSessionResult; // Error occurred while updating user session
-
-    return new UserSessionUpdateSuccess(sessionToken); // User session updated successfully
+async function validateUserSession(token) {
+    try {
+        const data = jwt.verify(token, process.env.JWT_SECRET);
+        const userid = data.id;
+        const validateUserExistsResult = await validateUserExists(userid); // Validate that the user exists
+        if (validateUserExistsResult instanceof Error.BusinessError) return validateUserExistsResult; // Error occurred while querying the database
+        return new ValidateUserSessionSuccess(userid, validateUserExistsResult.username, token); // User session is valid
+    } catch (err) {
+        return new Error.InvalidtokenError(err); // Session token is invalid
+    }
 }
 
-async function validateUserSession(sessionToken, username) {
-    const validateUserExistsResult = await validateUserExists(username);
+async function updateUserSession(token) {
+    const validateUserSessionResult = await validateUserSession(token);
+    if (validateUserSessionResult instanceof Error.BusinessError) return validateUserSessionResult; // Error occurred while validating user session
 
-    if (validateUserExistsResult instanceof Error.BusinessError) {
-        return validateUserExistsResult; // Error occurred while querying the database
-    }
+    const userid = validateUserSessionResult.userid;
+    const newToken = jwt.sign({ id: userid }, process.env.JWT_SECRET, { expiresIn: '2h' });
 
-    const validateUserSessionResult = await db.query(`SELECT * FROM UserSessions WHERE sessiontoken = ? AND userid = ?`, [
-        sessionToken,
-        validateUserExistsResult.userid,
-    ]);
-
-    if (validateUserSessionResult instanceof Error.BusinessError) return validateUserSessionResult; // Error occurred while querying the database
-    if (validateUserSessionResult.result.length > 0) {
-        if (validateUserSessionResult.result[0].status === status.blocked) return new Error.UserIsBlockedError(); // User is blocked
-        const currentTime = new Date();
-        const sessionExpired = currentTime > validateUserSessionResult.result[0].expiration;
-        if (sessionExpired) return new Error.UserNotLoggedIn(); // Session token is invalid
-
-        const updateUserSessionResult = await updateUserSession(sessionToken); // Update session expiration
-
-        if (updateUserSessionResult instanceof Error.BusinessError) return updateUserSessionResult; // Error occurred while updating user session
-
-        return new ValidateUserSessionSuccess();
-    }
-
-    return new Error.InvalidSessionTokenError(); // Session token is invalid
+    return new UserSessionUpdateSuccess(userid, newToken); // User session updated successfully
 }
 
 module.exports = { createUserSession, validateUserSession, updateUserSession, validateUserExists, validateUsername, validateUserIsActive };
