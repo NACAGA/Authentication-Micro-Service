@@ -1,11 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
+const { body, header } = require('express-validator');
 const userAuthenticationController = require('../controllers/userAuthentication.controller');
 
 const validateRequestBody = (expectedFields) => {
     return (req, res, next) => {
         const missingFields = expectedFields.filter((field) => !(field in req.body));
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({
+                message: `Missing fields: ${missingFields.join(', ')}`,
+            });
+        }
+
+        next();
+    };
+};
+
+validateRequestHeaders = (expectedFields) => {
+    return (req, res, next) => {
+        const missingFields = expectedFields.filter((field) => !(field in req.headers));
 
         if (missingFields.length > 0) {
             return res.status(400).json({
@@ -32,16 +46,16 @@ router.post(
 );
 
 /* DELETE delete user. */
-router.delete('/delete-user', [validateRequestBody(['username']), body('username').isString()], userAuthenticationController.deleteUser);
+router.delete('/delete-user', [validateRequestBody(['id']), body('id').isInt()], userAuthenticationController.deleteUser);
 
 /* PATCH change username. */
 router.patch(
     '/change-username',
     [
-        validateRequestBody(['username', 'new_username', 'sessionToken']),
-        body('username').isString(),
+        validateRequestBody(['new_username']),
+        validateRequestHeaders(['authorization']),
         body('new_username').isString(),
-        body('sessionToken').isString(),
+        header('authorization').isString(),
     ],
     userAuthenticationController.changeUsername
 );
@@ -50,10 +64,10 @@ router.patch(
 router.patch(
     '/change-password',
     [
-        validateRequestBody(['username', 'new_password', 'sessionToken']),
-        body('username').isString(),
+        validateRequestBody(['new_password']),
+        validateRequestHeaders(['authorization']),
         body('new_password').isString(),
-        body('sessionToken').isString(),
+        header('authorization').isString(),
     ],
     userAuthenticationController.changePassword
 );
@@ -61,37 +75,30 @@ router.patch(
 /* PATCH change user info. */
 router.patch(
     '/change-user-info',
-    [validateRequestBody(['username', 'new_fields', 'sessionToken']), body('username').isString(), body('sessionToken').isString()],
+    [validateRequestBody(['new_fields']), validateRequestHeaders(['authorization']), header('authorization').isString()],
     userAuthenticationController.changeUserInfo
 );
-
-/* POST logout user. */
-router.post('/logout-user', [validateRequestBody('username'), body('username').isString()], userAuthenticationController.logoutUser);
 
 /* POST validate user session. */
 router.post(
     '/validate-user-session',
-    [validateRequestBody(['username', 'sessionToken']), body('username').isString(), body('sessionToken').isString()],
+    [validateRequestHeaders(['authorization']), header('authorization').isString()],
     userAuthenticationController.validateUserSession
 );
 
 /* POST activate user. */
-router.post('/activate-user', [validateRequestBody(['username']), body('username').isString()], userAuthenticationController.activateUser);
+router.post('/activate-user', [validateRequestBody(['id']), body('id').isInt()], userAuthenticationController.activateUser);
 
 /* POST deactivate user. */
-router.post(
-    '/deactivate-user',
-    [validateRequestBody(['username']), body('username').isString()],
-    userAuthenticationController.deactivateUser
-);
+router.post('/deactivate-user', [validateRequestBody(['id']), body('id').isInt()], userAuthenticationController.deactivateUser);
 
 /* POST block user. */
-router.post('/block-user', [validateRequestBody(['username']), body('username').isString()], userAuthenticationController.blockUser);
+router.post('/block-user', [validateRequestBody(['id']), body('id').isInt()], userAuthenticationController.blockUser);
 
 /* GET get users. */
 router.get('/get-users', [validateRequestBody(['fields']), body('fields').isObject()], userAuthenticationController.getUsers);
 
 /* GET get user info. */
-router.get('/get-user-info', [validateRequestBody(['username']), body('username').isString()], userAuthenticationController.getUserInfo);
+router.get('/get-user-info', [validateRequestBody(['id']), body('id').isInt()], userAuthenticationController.getUserInfo);
 
 module.exports = router;

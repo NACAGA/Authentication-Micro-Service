@@ -112,11 +112,12 @@ class SessionUpdateError extends BusinessError {
     }
 }
 
-class InvalidSessionTokenError extends BusinessError {
-    constructor() {
+class InvalidtokenError extends BusinessError {
+    constructor(err) {
         super();
         this.message = 'Invalid session token';
         this.code = 403;
+        this.error = err;
     }
 }
 
@@ -216,7 +217,7 @@ module.exports = {
     ChangeUserInfoError,
     InvalidSqlQueryError,
     SessionUpdateError,
-    InvalidSessionTokenError,
+    InvalidtokenError,
     LogoutUserError,
     ChangeUserStatusError,
     UserIsNotActiveError,

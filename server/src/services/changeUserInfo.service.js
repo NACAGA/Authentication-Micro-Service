@@ -13,16 +13,16 @@ class ChangeUserInfoSuccess extends Success {
 }
 
 async function changeUserInfo(user) {
-    const validUserSession = await userSession.validateUserSession(user.sessionToken, user.username);
+    const validUserSession = await userSession.validateUserSession(user.token, user.username);
     switch (true) {
         case validUserSession instanceof Error.BusinessError:
             return validUserSession;
         default:
-            const {query, values } = utils.buildEditUserInfoQuery(user.new_fields, user.username);
+            const { query, values } = utils.buildEditUserInfoQuery(user.new_fields, user.username);
             const changeUserInfoResult = await db.query(query, values);
             switch (true) {
                 case changeUserInfoResult.result.affectedRows > 0:
-                    const updateSessionResult = await userSession.updateUserSession(user.sessionToken);
+                    const updateSessionResult = await userSession.updateUserSession(user.token);
                     switch (true) {
                         case updateSessionResult instanceof Error.BusinessError:
                             return updateSessionResult;
