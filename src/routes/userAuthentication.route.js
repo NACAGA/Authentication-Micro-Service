@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body, headers } = require('express-validator');
+const { body, header } = require('express-validator');
 const userAuthenticationController = require('../controllers/userAuthentication.controller');
 
 const validateRequestBody = (expectedFields) => {
@@ -51,28 +51,38 @@ router.delete('/delete-user', [validateRequestBody(['id']), body('id').isInt()],
 /* PATCH change username. */
 router.patch(
     '/change-username',
-    [validateRequestBody(['id', 'new_username', 'token']), body('id').isInt(), body('new_username').isString(), body('token').isString()],
+    [
+        validateRequestBody(['new_username']),
+        validateRequestHeaders(['authorization']),
+        body('new_username').isString(),
+        header('authorization').isString(),
+    ],
     userAuthenticationController.changeUsername
 );
 
 /* PATCH change password. */
 router.patch(
     '/change-password',
-    [validateRequestBody(['id', 'new_password', 'token']), body('id').isInt(), body('new_password').isString(), body('token').isString()],
+    [
+        validateRequestBody(['new_password']),
+        validateRequestHeaders(['authorization']),
+        body('new_password').isString(),
+        header('authorization').isString(),
+    ],
     userAuthenticationController.changePassword
 );
 
 /* PATCH change user info. */
 router.patch(
     '/change-user-info',
-    [validateRequestBody(['id', 'new_fields', 'token']), body('id').isInt(), body('token').isString()],
+    [validateRequestBody(['new_fields']), validateRequestHeaders(['authorization']), header('authorization').isString()],
     userAuthenticationController.changeUserInfo
 );
 
 /* POST validate user session. */
 router.post(
     '/validate-user-session',
-    [validateRequestBody(['token']), body('token').isString()],
+    [validateRequestHeaders(['authorization']), header('authorization').isString()],
     userAuthenticationController.validateUserSession
 );
 

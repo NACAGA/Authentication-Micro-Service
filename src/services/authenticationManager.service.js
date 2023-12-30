@@ -107,7 +107,7 @@ async function validateUserSession(token) {
         const userid = data.id;
         const validateUserExistsResult = await validateUserExists(userid); // Validate that the user exists
         if (validateUserExistsResult instanceof Error.BusinessError) return validateUserExistsResult; // Error occurred while querying the database
-        return ValidateUserSessionSuccess(userid, validateUserExistsResult.username, token); // User session is valid
+        return new ValidateUserSessionSuccess(userid, validateUserExistsResult.username, token); // User session is valid
     } catch (err) {
         return new Error.InvalidtokenError(err); // Session token is invalid
     }

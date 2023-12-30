@@ -13,14 +13,17 @@ class UsernameChangedSuccess extends Success {
     }
 }
 
-async function changeUsername(user) {
-    const validUserSessionResult = await userManager.validateUserSession(user.token);
+async function changeUsername(token, user) {
+    const validUserSessionResult = await userManager.validateUserSession(token);
     if (validUserSessionResult instanceof Error.BusinessError) return validUserSessionResult; // User session is invalid
 
     const validateUsernameResult = await userManager.validateUsername(user.new_username);
     if (validateUsernameResult instanceof Error.BusinessError) return validateUsernameResult; // Username is taken
 
-    const changeUsernameResult = await db.query(`UPDATE Users SET username = ? WHERE id = ?`, [user.new_username, user.id]);
+    const changeUsernameResult = await db.query(`UPDATE Users SET username = ? WHERE id = ?`, [
+        user.new_username,
+        validUserSessionResult.userid,
+    ]);
     if (changeUsernameResult instanceof Error.BusinessError) return changeUsernameResult; // Error occured while changing username
     if (changeUsernameResult.result.affectedRows > 0) return new UsernameChangedSuccess(validUserSessionResult.userid, user.new_username);
 

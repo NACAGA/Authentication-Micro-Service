@@ -13,11 +13,14 @@ class PasswordChangedSuccess extends Success {
     }
 }
 
-async function changePassword(user) {
-    const validateUserSessionResult = await authManager.validateUserSession(user.token);
+async function changePassword(token, user) {
+    const validateUserSessionResult = await authManager.validateUserSession(token);
     if (validateUserSessionResult instanceof Error.BusinessError) return validateUserSessionResult;
 
-    const changePasswordResult = await db.query(`UPDATE Users SET password = ? WHERE id = ?`, [user.new_password, user.id]);
+    const changePasswordResult = await db.query(`UPDATE Users SET password = ? WHERE id = ?`, [
+        user.new_password,
+        validateUserSessionResult.userid,
+    ]);
     if (changePasswordResult instanceof Error.BusinessError) return changePasswordResult;
     if (changePasswordResult.result.affectedRows > 0)
         return new PasswordChangedSuccess(validateUserSessionResult.userid, validateUserSessionResult.username);
