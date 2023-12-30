@@ -2,6 +2,7 @@ const mysql = require('mysql2/promise');
 const dbConfig = require('../configs/db.config');
 const Success = require('./domain/success.domain');
 const Error = require('./domain/buisnessErrror.domain');
+const { get } = require('../routes/userAuthentication.route');
 
 class QuerySuccess extends Success {
     constructor(result) {
@@ -21,18 +22,18 @@ async function getConnection() {
     }
 }
 
-async function query(sql, params) {
+async function closeConnection(connection) {
     try {
-        const connection = await mysql.createConnection(dbConfig);
-        const [rows] = await connection.execute(sql, params);
-        return new QuerySuccess(rows);
+        await connection.end();
     } catch (err) {
         return new Error.DatabaseError(err);
     }
 }
 
-
-async function queryConn(connection, sql, params) {
+async function query(sql, params, connection) {
+    if (!connection) { // if connection is not provided, create a new one
+        connection = await getConnection();
+    }
     try {
         const [rows] = await connection.execute(sql, params);
         return new QuerySuccess(rows);
@@ -44,6 +45,6 @@ async function queryConn(connection, sql, params) {
 module.exports = {
     query,
     QuerySuccess,
-    queryConn,
     getConnection,
+    closeConnection,
 };
