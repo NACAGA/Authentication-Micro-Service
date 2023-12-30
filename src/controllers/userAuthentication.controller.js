@@ -10,6 +10,7 @@ const deactivateUserService = require('../services/deactivateUser.service');
 const blockUserService = require('../services/blockUser.service');
 const getUsersService = require('../services/getUsers.service');
 const getUserInfoService = require('../services/getUserInfo.service');
+const db = require('../services/db.service');
 
 async function createUser(req, res, next) {
     try {
