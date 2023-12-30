@@ -15,7 +15,8 @@ async function createUser(newUser) {
     const validUsernameResult = await userManager.validateUsername(newUser.username);
     if (validUsernameResult instanceof Error.BusinessError) return validUsernameResult;
 
-    const createUserResult = await db.query(`INSERT INTO Users (username, password, status) VALUES (?, ?, ?)`, [
+    const connection = await db.getConnection();
+    const createUserResult = await db.queryConn(connection, `INSERT INTO Users (username, password, status) VALUES (?, ?, ?)`, [
         newUser.username,
         newUser.password,
         status.active,

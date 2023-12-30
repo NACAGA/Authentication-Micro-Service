@@ -12,6 +12,15 @@ class QuerySuccess extends Success {
     }
 }
 
+async function getConnection() {
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        return connection;
+    } catch (err) {
+        return new Error.DatabaseError(err);
+    }
+}
+
 async function query(sql, params) {
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -22,7 +31,19 @@ async function query(sql, params) {
     }
 }
 
+
+async function queryConn(connection, sql, params) {
+    try {
+        const [rows] = await connection.execute(sql, params);
+        return new QuerySuccess(rows);
+    } catch (err) {
+        return new Error.DatabaseError(err);
+    }
+}
+
 module.exports = {
     query,
     QuerySuccess,
+    queryConn,
+    getConnection,
 };
