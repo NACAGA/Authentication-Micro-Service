@@ -634,17 +634,15 @@ MARIADB_PASSWORD=password # change this if you want to use a different password
 MARIADB_USER=user1 # change this if you want to use a different user
 MARIADB_DATABASE=test_database # change this if you want to use a different database name
 MARIADB_ROOT_PASSWORD=root_password # change this if you want to use a different root password
+DB_HOST=database # database is the name of the database container
 
 DB_PORT=3306 # default mysql port
 SERVER_PORT=3000 # change this if you want to use a different port
 
-JWT_SECRET = # add your key here
-
-# do not change this
-DB_HOST=database # database is the name of the database container
+JWT_SECRET= # add your key here
 ```
 
-Adjust the values based on your specific configuration.
+Adjust the values based on your specific configuration. DB_HOST can be the ip address of the database container if you are not using docker-compose. It could also be localhost if running on your local machine.
 
 ### Running the Microservice
 
