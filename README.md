@@ -652,7 +652,7 @@ Line 1 copies the .env file to the current environment. Line 2 builds the databa
 ```bash
 [ ! -f .env ] || export $(grep -v '^#' .env | xargs)
 docker build -t ams-database database $(for i in `cat .env`; do out+="--build-arg $i " ; done; echo $out;out="")
-docker run -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
+docker run --rm -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
 DB_HOST=localhost npm start
 ```
 
@@ -677,6 +677,6 @@ To run the tests, run the following command inside of the root directory. This d
 ```bash
 [ ! -f .env ] || export $(grep -v '^#' .env | xargs)
 docker build -t ams-database database $(for i in `cat .env`; do out+="--build-arg $i " ; done; echo $out;out="")
-docker run -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
+docker run --rm -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
 DB_HOST=localhost npm test
 ```
