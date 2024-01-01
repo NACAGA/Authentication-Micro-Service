@@ -630,10 +630,10 @@ Make sure to include a `.env` file in the root directory of the project (Same di
 should be present:
 
 ```env
-MYSQL_PASSWORD=password # change this if you want to use a different password
-MYSQL_USER=user1 # change this if you want to use a different user
-MYSQL_DATABASE=test_database # change this if you want to use a different database name
-MYSQL_ROOT_PASSWORD=root_password # change this if you want to use a different root password
+MARIADB_PASSWORD=password # change this if you want to use a different password
+MARIADB_USER=user1 # change this if you want to use a different user
+MARIADB_DATABASE=test_database # change this if you want to use a different database name
+MARIADB_ROOT_PASSWORD=root_password # change this if you want to use a different root password
 
 DB_PORT=3306 # default mysql port
 SERVER_PORT=3000 # change this if you want to use a different port

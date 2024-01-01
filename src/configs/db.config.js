@@ -5,9 +5,9 @@ const env = process.env;
 const db = {
     host: env.DB_HOST,
     port: env.DB_PORT,
-    user: env.MYSQL_USER,
-    password: env.MYSQL_PASSWORD,
-    database: env.MYSQL_DATABASE,
+    user: env.MARIADB_USER,
+    password: env.MARIADB_PASSWORD,
+    database: env.MARIADB_DATABASE,
 };
 
 module.exports = db;
