@@ -672,7 +672,7 @@ docker compose down
 
 ### Testing
 
-To run the tests, run the following command inside of the root directory. This doesn't yet work inside of docker compose.
+To run the tests, run the following command inside of the root directory. 
 
 ```bash
 [ ! -f .env ] || export $(grep -v '^#' .env | xargs)
