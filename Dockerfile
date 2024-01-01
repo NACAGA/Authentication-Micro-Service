@@ -20,4 +20,4 @@ RUN npm ci
 RUN npm install
 
 # Start the application 
-CMD ["npm", "run", "start:test"]
+CMD ["npm", "run", "test"]

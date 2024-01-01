@@ -31,7 +31,6 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     tty: true
-    stdin_open: true
     volumes:
       - .:/workspace
     networks:
