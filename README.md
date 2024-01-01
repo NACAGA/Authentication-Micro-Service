@@ -648,11 +648,17 @@ Adjust the values based on your specific configuration.
 
 ### Running the Microservice
 
-To run the service locally on your machine, run the following command inside of the server directory.
+To run the service locally on your machine, run the following command inside of the root directory. 
+Line 1 copies the .env file to the current environment. Line 2 builds the database docker image with the environment variables from the .env file. Line 3 runs the database docker image. Line 4 runs the tests.
 
 ```bash
-npm start
+[ ! -f .env ] || export $(grep -v '^#' .env | xargs)
+docker build -t ams-database database $(for i in `cat .env`; do out+="--build-arg $i " ; done; echo $out;out="")
+docker run -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
+DB_HOST=localhost npm start
 ```
+
+OR
 
 To run the service in Docker containers the following command from the base directory:
 
@@ -666,22 +672,13 @@ To remove all containers afterwards, run:
 docker compose down
 ```
 
-## Testing
+### Testing
 
-Provide instructions on how to perform tests from the test suite here.
+To run the tests, run the following command inside of the root directory. This doesn't yet work inside of docker compose.
 
-npm start
-
-````
-
-To spin up the microservice in a local docker container, follow these steps:
-
-1. Run this command in the server directory
-    ```bash
-    docker ...
-    ```
-
-## Testing
-
-Provide instructions on how to perform tests from the test suite here.
-````
+```bash
+[ ! -f .env ] || export $(grep -v '^#' .env | xargs)
+docker build -t ams-database database $(for i in `cat .env`; do out+="--build-arg $i " ; done; echo $out;out="")
+docker run -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
+DB_HOST=localhost npm test
+```
