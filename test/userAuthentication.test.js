@@ -10,6 +10,7 @@ const testUser = {
 describe('POST /user-authentication/create-user', () => {
     it('OK, creating a new user works', async () => {
         const res = await request(app).post('/user-authentication/create-user').send(testUser);
+        console.log(res.body);
         expect(res.statusCode).toBe(201);
     })
 });
