@@ -48,6 +48,7 @@ async function query(sql, params) {
     try {
         const connection = await mysql.createConnection(dbConfig);
         const [rows] = await connection.execute(sql, params);
+        await connection.end();
         return new QuerySuccess(rows);
     } catch (err) {
         console.log(err);

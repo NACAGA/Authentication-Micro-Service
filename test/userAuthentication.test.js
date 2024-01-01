@@ -3,8 +3,8 @@ const app = require('../src/app');
 const request = require("supertest");
 
 const testUser = {
-    username: 'test',
-    password: 'test'
+    username: 'testUser',
+    password: 'testPassword'
 };
 
 describe('POST /user-authentication/create-user', () => {

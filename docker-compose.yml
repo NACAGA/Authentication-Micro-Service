@@ -17,7 +17,7 @@ services:
       - ${DB_PORT}:${DB_PORT}
     restart: always
     networks:
-      obscenity:
+      user_auth:
         ipv4_address: 172.20.0.2
   server:
     depends_on:
@@ -35,10 +35,10 @@ services:
     volumes:
       - .:/workspace
     networks:
-      obscenity:
+      user_auth:
         ipv4_address: 172.20.0.3
 networks:
-  obscenity:
+  user_auth:
     ipam:
       config:
         - subnet: 172.20.0.0/16
