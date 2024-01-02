@@ -14,41 +14,31 @@ class QuerySuccess extends Success {
     }
 }
 
+let connection;
+
 async function getConnection() {
     try {
-        const connection = await mysql.createConnection(dbConfig);
+        if (!connection) { // if connection is not provided, create a new one
+            connection = await mysql.createConnection(dbConfig);
+        }
         return connection;
     } catch (err) {
         return new Error.DatabaseError(err);
     }
 }
 
-async function closeConnection(connection) {
+async function closeConnection() {
     try {
         await connection.end();
     } catch (err) {
-        return new Error.DatabaseError(err);
-    }
-}
-
-async function queryOverload(sql, params, connection) {
-    if (!connection) { // if connection is not provided, create a new one
-        connection = await getConnection();
-    }
-    try {
-        const [rows] = await connection.execute(sql, params);
-        return new QuerySuccess(rows);
-    } catch (err) {
-        console.log(err);
         return new Error.DatabaseError(err);
     }
 }
 
 async function query(sql, params) {
     try {
-        const connection = await mysql.createConnection(dbConfig);
+        connection = await getConnection();
         const [rows] = await connection.execute(sql, params);
-        await connection.end();
         return new QuerySuccess(rows);
     } catch (err) {
         console.log(err);
