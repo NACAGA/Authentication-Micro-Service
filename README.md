@@ -642,12 +642,14 @@ SERVER_PORT=3000 # change this if you want to use a different port
 JWT_SECRET= # add your key here
 ```
 
-Adjust the values based on your specific configuration. DB_HOST can be the ip address of the database container if you are not using docker-compose. It could also be localhost if running on your local machine.
+Adjust the values based on your specific configuration. DB_HOST can be the ip address of the database container if you are not using
+docker-compose. It could also be localhost if running on your local machine.
 
 ### Running the Microservice
 
-To run the service locally on your machine, run the following command inside of the root directory. 
-Line 1 copies the .env file to the current environment. Line 2 builds the database docker image with the environment variables from the .env file. Line 3 runs the database docker image. Line 4 runs the tests.
+To run the service locally on your machine, run the following command inside of the root directory. Line 1 copies the .env file to the
+current environment. Line 2 builds the database docker image with the environment variables from the .env file. Line 3 runs the database
+docker image. Line 4 runs the tests.
 
 ```bash
 [ ! -f .env ] || export $(grep -v '^#' .env | xargs)
@@ -672,11 +674,17 @@ docker compose down
 
 ### Testing
 
-To run the tests, run the following command inside of the root directory. 
+To run the tests, run the following command inside of the root directory.
 
 ```bash
 [ ! -f .env ] || export $(grep -v '^#' .env | xargs)
 docker build -t ams-database database $(for i in `cat .env`; do out+="--build-arg $i " ; done; echo $out;out="")
 docker run --rm -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
 DB_HOST=localhost npm test
+```
+
+For Nate
+
+```bash
+docker compose up --build
 ```
