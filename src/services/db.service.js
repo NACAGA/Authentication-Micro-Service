@@ -31,7 +31,7 @@ async function closeConnection(connection) {
     }
 }
 
-async function query(sql, params, connection) {
+async function queryOverload(sql, params, connection) {
     if (!connection) { // if connection is not provided, create a new one
         connection = await getConnection();
     }
@@ -39,6 +39,19 @@ async function query(sql, params, connection) {
         const [rows] = await connection.execute(sql, params);
         return new QuerySuccess(rows);
     } catch (err) {
+        console.log(err);
+        return new Error.DatabaseError(err);
+    }
+}
+
+async function query(sql, params) {
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute(sql, params);
+        await connection.end();
+        return new QuerySuccess(rows);
+    } catch (err) {
+        console.log(err);
         return new Error.DatabaseError(err);
     }
 }

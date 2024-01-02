@@ -630,29 +630,35 @@ Make sure to include a `.env` file in the root directory of the project (Same di
 should be present:
 
 ```env
-MYSQL_PASSWORD=password # change this if you want to use a different password
-MYSQL_USER=user1 # change this if you want to use a different user
-MYSQL_DATABASE=test_database # change this if you want to use a different database name
-MYSQL_ROOT_PASSWORD=root_password # change this if you want to use a different root password
+MARIADB_PASSWORD=password # change this if you want to use a different password
+MARIADB_USER=user1 # change this if you want to use a different user
+MARIADB_DATABASE=test_database # change this if you want to use a different database name
+MARIADB_ROOT_PASSWORD=root_password # change this if you want to use a different root password
+DB_HOST=database # database is the name of the database container
 
 DB_PORT=3306 # default mysql port
 SERVER_PORT=3000 # change this if you want to use a different port
 
-JWT_SECRET = # add your key here
-
-# do not change this
-DB_HOST=database # database is the name of the database container
+JWT_SECRET= # add your key here
 ```
 
-Adjust the values based on your specific configuration.
+Adjust the values based on your specific configuration. DB_HOST can be the ip address of the database container if you are not using
+docker-compose. It could also be localhost if running on your local machine.
 
 ### Running the Microservice
 
-To run the service locally on your machine, run the following command inside of the server directory.
+To run the service locally on your machine, run the following command inside of the root directory. Line 1 copies the .env file to the
+current environment. Line 2 builds the database docker image with the environment variables from the .env file. Line 3 runs the database
+docker image. Line 4 runs the tests.
 
 ```bash
-npm start
+[ ! -f .env ] || export $(grep -v '^#' .env | xargs)
+docker build -t ams-database database $(for i in `cat .env`; do out+="--build-arg $i " ; done; echo $out;out="")
+docker run --rm -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
+DB_HOST=localhost npm start
 ```
+
+OR
 
 To run the service in Docker containers the following command from the base directory:
 
@@ -666,22 +672,19 @@ To remove all containers afterwards, run:
 docker compose down
 ```
 
-## Testing
+### Testing
 
-Provide instructions on how to perform tests from the test suite here.
+To run the tests, run the following command inside of the root directory.
 
-npm start
+```bash
+[ ! -f .env ] || export $(grep -v '^#' .env | xargs)
+docker build -t ams-database database $(for i in `cat .env`; do out+="--build-arg $i " ; done; echo $out;out="")
+docker run --rm -d -p $DB_PORT:$DB_PORT --name ams-database-dt ams-database
+DB_HOST=localhost npm test
+```
 
-````
+For Nate
 
-To spin up the microservice in a local docker container, follow these steps:
-
-1. Run this command in the server directory
-    ```bash
-    docker ...
-    ```
-
-## Testing
-
-Provide instructions on how to perform tests from the test suite here.
-````
+```bash
+docker compose up --build
+```

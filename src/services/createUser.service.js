@@ -16,13 +16,11 @@ async function createUser(user) {
     const validUsernameResult = await userManager.validateUsername(user.username);
     if (validUsernameResult instanceof Error.BusinessError) return validUsernameResult;
 
-    const connection = await db.getConnection();
     const createUserResult = await db.query(`INSERT INTO Users (username, password, status) VALUES (?, ?, ?)`, [
         user.username,
         user.password,
         status.active,
-    ], connection);
-    await db.closeConnection(connection);
+    ]);
     if (createUserResult instanceof Error.DatabaseError) return createUserResult;
     if (createUserResult.result.affectedRows > 0) return new CreateUserSuccess(user.username);
 

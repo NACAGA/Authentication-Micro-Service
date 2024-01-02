@@ -1,4 +1,4 @@
-version: '2'
+version: '1'
 
 services:
   database:
@@ -7,17 +7,17 @@ services:
     build:
       context: database
       args:
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+        - MARIADB_DATABASE=${MARIADB_DATABASE}
+        - MARIADB_USER=${MARIADB_USER}
+        - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
       dockerfile: Dockerfile
     container_name: ams-database
     ports:
       - ${DB_PORT}:${DB_PORT}
     restart: always
     networks:
-      obscenity:
+      user_auth:
         ipv4_address: 172.20.0.2
   server:
     depends_on:
@@ -31,14 +31,13 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     tty: true
-    stdin_open: true
     volumes:
       - .:/workspace
     networks:
-      obscenity:
+      user_auth:
         ipv4_address: 172.20.0.3
 networks:
-  obscenity:
+  user_auth:
     ipam:
       config:
         - subnet: 172.20.0.0/16
