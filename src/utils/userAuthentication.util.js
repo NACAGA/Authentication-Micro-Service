@@ -1,7 +1,6 @@
 function buildEditUserInfoQuery(fields, userid, tableColumns) {
     let query = `Update Users SET `;
     let values = [];
-    console.log(tableColumns);
     for (const field in fields) {
         if (!tableColumns.includes(field)) continue;
         query += `${field} = ?, `;
