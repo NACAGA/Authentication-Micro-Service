@@ -1,9 +1,7 @@
 const mysql = require('mysql2/promise');
-const mysql2 = require('mysql2');
 const dbConfig = require('../configs/db.config');
 const Success = require('./domain/success.domain');
 const Error = require('./domain/buisnessErrror.domain');
-const { get } = require('../routes/userAuthentication.route');
 
 class QuerySuccess extends Success {
     constructor(result) {
