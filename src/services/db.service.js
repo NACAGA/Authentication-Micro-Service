@@ -27,6 +27,14 @@ async function getConnection() {
     }
 }
 
+async function setConnection(newConnection) {
+    try {
+        connection = newConnection;
+    } catch (err) {
+        return new Error.DatabaseError(err);
+    }
+}
+
 async function closeConnection() {
     try {
         await connection.end();
@@ -51,4 +59,5 @@ module.exports = {
     QuerySuccess,
     getConnection,
     closeConnection,
+    setConnection
 };
