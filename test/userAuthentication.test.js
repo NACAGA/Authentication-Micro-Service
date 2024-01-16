@@ -1,14 +1,27 @@
 require('dotenv').config();
 const app = require('../src/app');
 const request = require("supertest");
+const db = require('../src/services/db.service');
+const dbConfig = require('../src/configs/db.config');
+
 
 describe('router userAuthentication', () => {
     const testUser = {
         username: 'testUser',
         password: 'testPassword',
         authToken: '',
-        id: -1
+        id: null
     };
+
+    beforeAll(async () => {
+        await db.destroyConnection();
+        await db.getConnection(true);
+    });
+
+    afterAll(async () => {
+        // close the db connection so it doesn't block any other tests
+        await db.closeConnection();
+    });
     describe('POST /user-authentication/create-user', () => {
         it('OK, creating a new user works', async () => {
             const res = await request(app).post('/user-authentication/create-user').send(testUser);
@@ -102,3 +115,4 @@ describe('router userAuthentication', () => {
         })
     });
 });
+//* /

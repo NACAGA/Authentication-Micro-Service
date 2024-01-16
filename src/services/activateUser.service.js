@@ -19,7 +19,6 @@ async function activateUser(user) {
     const activateUserResult = await db.query(`UPDATE Users SET status = ? WHERE id = ?`, [status.active, validateUserExistsResult.userid]); // Set the user's status to active
     if (activateUserResult instanceof Error.BusinessError) return activateUserResult;
     if (activateUserResult.result.affectedRows > 0) return new ActivateUserSuccess(); // User activated successfully
-
     return new Error.ActivateUserError(); // Error occured while activating user
 }
 
