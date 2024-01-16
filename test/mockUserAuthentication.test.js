@@ -12,6 +12,14 @@ function createDBJestFn() {
 
 let mockExecute, mockEnd, mockDbConnection;
 
+describe('GET /', () => {
+    it('OK, getting root works', async () => {
+        const res = await request(app).get('/');
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe('ok');
+    })
+});
+
 describe('mock db connection', () => {
     const mockUser = {
         username: 'mockUser',

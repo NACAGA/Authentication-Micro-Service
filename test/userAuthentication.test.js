@@ -4,6 +4,13 @@ const request = require("supertest");
 const db = require('../src/services/db.service');
 const dbConfig = require('../src/configs/db.config');
 
+describe('GET /', () => {
+    it('OK, getting root works', async () => {
+        const res = await request(app).get('/');
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe('ok');
+    })
+});
 
 describe('router userAuthentication', () => {
     const testUser = {
