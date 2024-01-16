@@ -22,7 +22,7 @@ describe('router userAuthentication', () => {
 
     beforeAll(async () => {
         await db.destroyConnection();
-        await db.getConnection(true);
+        await db.getConnection();
     });
 
     afterAll(async () => {
