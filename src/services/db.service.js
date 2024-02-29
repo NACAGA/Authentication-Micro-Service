@@ -15,40 +15,24 @@ class QuerySuccess extends Success {
 let connection;
 
 async function getConnection() {
-    try {
-        if (!connection) { // if connection is not provided, create a new one
-            connection = await mysql.createConnection(dbConfig);
-            // console.debug('New connection created!');
-        }
-        return connection;
-    } catch (err) {
-        return new Error.DatabaseError(err);
+    if (!connection) {
+        // if connection is not provided, create a new one
+        connection = await mysql.createConnection(dbConfig);
+        // console.debug('New connection created!');
     }
+    return connection;
 }
 
 async function setConnection(newConnection) {
-    try {
-        connection = newConnection;
-    } catch (err) {
-        return new Error.DatabaseError(err);
-    }
+    connection = newConnection;
 }
 
 async function destroyConnection() {
-    try {
-        connection = null;
-    } catch (err) {
-        return new Error.DatabaseError(err);
-    }
+    connection = null;
 }
 
 async function closeConnection() {
-    try {
-        await connection.end();
-        // console.debug('Connection closed!');
-    } catch (err) {
-        return new Error.DatabaseError(err);
-    }
+    await connection.end();
 }
 
 async function query(sql, params) {
@@ -70,5 +54,5 @@ module.exports = {
     getConnection,
     closeConnection,
     setConnection,
-    destroyConnection
+    destroyConnection,
 };
